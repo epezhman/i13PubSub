@@ -23,7 +23,7 @@ function createPublishWindow() {
 		icon: "../ assets/img/p.png",
 		useContentSize: true,
 		width: 800,
-		height: 400,
+		height: 430,
 		x: 0,
 		y: 0
 	});

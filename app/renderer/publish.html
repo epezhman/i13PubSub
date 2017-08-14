@@ -15,10 +15,40 @@
 	</header>
 	<div class="window-content">
 		<div class="pane-group">
-			<div class="pane">...</div>
+			<div class="pane">
+				<div class="publisher-container">
+					<h3>Publish Message with Topics</h3>
+					<hr>
+					<form id="pub-form">
+						<div class="form-group">
+							<label>Topics</label>
+							<input class="form-control" placeholder="Topics" id="pub-topics" required>
+							<p class="help-block">The topics can be separated by comma</p>
+						</div>
+						<div class="form-group">
+							<label>Message</label>
+							<textarea class="form-control" rows="3" id="pub-message" placeholder="Message"
+									  required></textarea>
+						</div>
+						<div class="form-actions">
+							<button type="reset" class="btn btn-form btn-default">Cancel</button>
+							<button type="button" class="btn btn-form btn-primary" id="pub-submit">Publish</button>
+						</div>
+						<div class=form-control"">
+							<p class="help-block" id="pub-published" style="display: none">Message Published!</p>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+<script>
+	if (typeof module === 'object') {
+		window.module = module;
+		module = undefined;
+	}
+</script>
 <script src="../node_modules/jquery/dist/jquery.js"></script>
 <script src="publisher.js"></script>
 </body>

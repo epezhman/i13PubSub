@@ -1,5 +1,8 @@
 'use strict';
 
+const secrets = require('./secrets.config')
+
+
 const appPackage = require('./package.json');
 const APP_SHORT_NAME = appPackage.name;
 const APP_NAME = appPackage.productName;
@@ -16,4 +19,8 @@ module.exports = {
 	IS_WINDOWS: IS_WINDOWS,
 	IS_LINUX: IS_LINUX,
 	IS_DEVELOPMENT: IS_DEVELOPMENT,
+
+	PUBLISH_URL: secrets.PUBLISH_URL,
+	SUBSCRIBE_URL: secrets.SUBSCRIBE_URL,
+	UNSUBSCRIBE_URL: secrets.UNSUBSCRIBE_URL,
 };
