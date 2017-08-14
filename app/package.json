@@ -1,0 +1,16 @@
+{
+  "name": "i13pubsub",
+  "productName": "i13PubSub",
+  "version": "0.1.0",
+  "description": "I13 PubSub",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "request": "^2.81.0"
+  }
+}
