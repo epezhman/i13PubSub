@@ -46,7 +46,7 @@ function createSubscribeWindow() {
 		icon: "../ assets/img/s.png",
 		useContentSize: true,
 		width: 800,
-		height: 400,
+		height: 900,
 		x: 950,
 		y: 0
 	});
@@ -77,5 +77,5 @@ app.on('activate', () => {
 
 app.on('ready', () => {
 	publishWindow = createPublishWindow();
-	//subscribeWindow = createSubscribeWindow();
+	subscribeWindow = createSubscribeWindow();
 });

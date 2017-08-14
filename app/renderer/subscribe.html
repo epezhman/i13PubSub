@@ -12,10 +12,54 @@
 <div class="window">
 	<div class="window-content">
 		<div class="pane-group">
-			<div class="pane">...</div>
+			<div class="pane">
+				<div class="subscriber-container">
+					<h3>Subscribe to Topics and Watch for Messages</h3>
+					<hr>
+					<form id="sub-form">
+						<div class="form-group">
+							<label>Topics to Subscribe</label>
+							<input class="form-control" placeholder="Topics to Subscribe" id="sub-topics" required>
+							<p class="help-block">The topics can be separated by comma</p>
+						</div>
+						<div class="form-actions">
+							<button type="button" class="btn btn-form btn-primary" id="sub-submit">Subscribe</button>
+						</div>
+						<div class=form-control"">
+							<p class="help-block" id="topic-subbed" style="display: none">Topics Subscribed!</p>
+						</div>
+					</form>
+					<hr>
+					<form id="unsub-form">
+						<div class="form-group">
+							<label>Topics to Unsubscribe</label>
+							<input class="form-control" placeholder="Topics to Unsubscribe" id="unsub-topics" required>
+							<p class="help-block">The topics can be separated by comma</p>
+						</div>
+						<div class="form-actions">
+							<button type="button" class="btn btn-form btn-primary" id="sunsub-submit">Unsubscribe</button>
+						</div>
+						<div class=form-control"">
+							<p class="help-block" id="topic-unsubed" style="display: none">Topics Unsubscribed!</p>
+						</div>
+					</form>
+					<hr>
+					<h4>Subscribed Topics</h4>
+					<p class="subs-topics" id="subbed-topics">None</p>
+					<hr>
+					<h4>Messages</h4>
+					<p class="sub-messages" id="got-messages">None</p>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+<script>
+	if (typeof module === 'object') {
+		window.module = module;
+		module = undefined;
+	}
+</script>
 <script src="../node_modules/jquery/dist/jquery.js"></script>
 <script src="subscriber.js"></script>
 </body>
