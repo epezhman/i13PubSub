@@ -11,7 +11,7 @@ let pubPublished;
 
 function publishMessage(topics, message) {
 	publish(topics, message);
-	pubForm[0].reset();
+	//pubForm[0].reset();
 	pubPublished.show();
 	pubPublished.hide(2000);
 }
@@ -41,5 +41,4 @@ $(document).ready(() => {
 			publishMessage(topics, message);
 		}
 	});
-
 });

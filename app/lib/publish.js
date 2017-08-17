@@ -11,8 +11,7 @@ function publish(topics, message) {
 		url: config.PUBLISH_URL,
 		form: {topics: topics, message: message}
 	}, (err, httpResponse, body) => {
-		if(err)
-		{
+		if (err) {
 			console.error(err)
 		}
 		console.log(body)

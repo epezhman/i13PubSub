@@ -10,45 +10,61 @@
 </head>
 <body>
 <div class="window">
+	<header class="toolbar toolbar-header">
+		<h1 class="title">i13 Subscriber</h1>
+	</header>
 	<div class="window-content">
 		<div class="pane-group">
 			<div class="pane">
 				<div class="subscriber-container">
 					<h3>Subscribe to Topics and Watch for Messages</h3>
+					<button type="button" class="btn btn-form btn-primary" id="register-sub" style="display: none">
+						Register Subscriber
+					</button>
+					<button type="button" class="btn btn-form btn-warning" id="deregister-sub" style="display: none">
+						Deregister Subscriber
+					</button>
+					<p class="help-block" id="register-error" style="display: none">Could not register, Try again</p>
 					<hr>
-					<form id="sub-form">
-						<div class="form-group">
-							<label>Topics to Subscribe</label>
-							<input class="form-control" placeholder="Topics to Subscribe" id="sub-topics" required>
-							<p class="help-block">The topics can be separated by comma</p>
-						</div>
-						<div class="form-actions">
-							<button type="button" class="btn btn-form btn-primary" id="sub-submit">Subscribe</button>
-						</div>
-						<div class=form-control"">
-							<p class="help-block" id="subbed-confirmed" style="display: none">Topics Subscribed!</p>
-						</div>
-					</form>
-					<hr>
-					<form id="unsub-form">
-						<div class="form-group">
-							<label>Topics to Unsubscribe</label>
-							<input class="form-control" placeholder="Topics to Unsubscribe" id="unsub-topics" required>
-							<p class="help-block">The topics can be separated by comma</p>
-						</div>
-						<div class="form-actions">
-							<button type="button" class="btn btn-form btn-primary" id="unsub-submit">Unsubscribe</button>
-						</div>
-						<div class=form-control"">
-							<p class="help-block" id="unsubed-confirmed" style="display: none">Topics Unsubscribed!</p>
-						</div>
-					</form>
-					<hr>
-					<h4>Subscribed Topics</h4>
-					<p class="subs-topics" id="already-subbed-topics">None</p>
-					<hr>
-					<h4>Messages</h4>
-					<p class="sub-messages" id="received-messages">None</p>
+					<div id="subscriber-actions" style="display: none;">
+						<form id="sub-form" disabled="disabled">
+							<div class="form-group">
+								<label>Topics to Subscribe</label>
+								<input class="form-control" placeholder="Topics to Subscribe" id="sub-topics" required>
+								<p class="help-block">The topics can be separated by comma</p>
+							</div>
+							<div class="form-actions">
+								<button type="button" class="btn btn-form btn-primary" id="sub-submit">Subscribe
+								</button>
+							</div>
+							<div class=form-control"">
+								<p class="help-block" id="subbed-confirmed" style="display: none">Topics Subscribed!</p>
+							</div>
+						</form>
+						<hr>
+						<form id="unsub-form">
+							<div class="form-group">
+								<label>Topics to Unsubscribe</label>
+								<input class="form-control" placeholder="Topics to Unsubscribe" id="unsub-topics"
+									   required>
+								<p class="help-block">The topics can be separated by comma</p>
+							</div>
+							<div class="form-actions">
+								<button type="button" class="btn btn-form btn-primary" id="unsub-submit">Unsubscribe
+								</button>
+							</div>
+							<div class=form-control"">
+								<p class="help-block" id="unsubed-confirmed" style="display: none">Topics
+									Unsubscribed!</p>
+							</div>
+						</form>
+						<hr>
+						<h4>Subscribed Topics</h4>
+						<p class="subs-topics" id="already-subbed-topics">None</p>
+						<hr>
+						<h4>Messages</h4>
+						<p class="sub-messages" id="received-messages"></p>
+					</div>
 				</div>
 			</div>
 		</div>
