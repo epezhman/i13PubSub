@@ -24,6 +24,7 @@ let alreadySubbedTopics;
 let receivedMessages;
 let receivedMessagesRealTime;
 let registerError;
+let realTimeMessageCounter;
 
 function subscribeTopics(topics) {
 	subscriber.subscribe(topics);
@@ -44,7 +45,7 @@ function getTopics() {
 	getT.then((res) => {
 		alreadySubbedTopics.text(res);
 	});
-	//setTimeout(getTopics, 1000);
+	setTimeout(getTopics, 1000);
 }
 
 function getMessagesPolling() {
@@ -54,8 +55,10 @@ function getMessagesPolling() {
 			receivedMessages.prepend('<b>Topic</b>: ' + res[0].topic + ', <b>Message</b>: ' + res[0].message + '</br>');
 		}
 	});
-	//setTimeout(getMessagesPolling, 1000);
+	setTimeout(getMessagesPolling, 1000);
 }
+
+let counter = 0;
 
 function getMessagesRealTime() {
 	//iot.getMessages()
@@ -72,17 +75,17 @@ function getMessagesRealTime() {
 	deviceClient.connect();
 	deviceClient.on("command", function (commandName, format, payload, topic) {
 		if (commandName === 'published_message') {
+			counter +=1;
+			realTimeMessageCounter.text(counter);
 			payload = JSON.parse(payload);
 			receivedMessagesRealTime.prepend('<b>Topic</b>: ' + payload['topic'] + ', <b>Message</b>: '
 				+ payload['message'] + ', <b>Time</b>: ' + payload['time'] + '</br>');
 		}
-
 	});
 
 	deviceClient.on("error", function (err) {
 		console.error(err)
 	});
-
 }
 
 $(document).ready(() => {
@@ -100,11 +103,13 @@ $(document).ready(() => {
 	alreadySubbedTopics = $('#already-subbed-topics');
 	receivedMessages = $('#received-messages');
 	receivedMessagesRealTime = $('#received-messages-real-time');
+	realTimeMessageCounter = $('#real-time-message-counter');
 	registerError = $('#register-error');
 
 	getTopics();
 	getMessagesPolling();
 	getMessagesRealTime();
+
 
 	if (conf.has('sub_id')) {
 		subActions.show();
