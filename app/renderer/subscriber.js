@@ -5,6 +5,7 @@ const subscriber = remote.require('../lib/subscribe');
 const iot = remote.require('../lib/iot');
 const ConfigStore = require('configstore');
 const config = require('../config');
+const Client = require("ibmiotf");
 
 const conf = new ConfigStore(config.APP_SHORT_NAME);
 
@@ -43,21 +44,44 @@ function getTopics() {
 	getT.then((res) => {
 		alreadySubbedTopics.text(res);
 	});
-	setTimeout(getTopics, 1000);
+	//setTimeout(getTopics, 1000);
 }
 
 function getMessagesPolling() {
 	let getM = subscriber.getMessages();
 	getM.then((res) => {
 		if (res !== "None") {
-			receivedMessages.prepend('<b>Topic</b>: ' + res[0].topic + ', <b>Message</b>: ' + res[0].message + '<br>');
+			receivedMessages.prepend('<b>Topic</b>: ' + res[0].topic + ', <b>Message</b>: ' + res[0].message + '</br>');
 		}
 	});
-	setTimeout(getMessagesPolling, 1000);
+	//setTimeout(getMessagesPolling, 1000);
 }
 
 function getMessagesRealTime() {
-	let getM = iot.getMessages();
+	//iot.getMessages()
+	const deviceConfig = {
+		"org": config.WATSON_IOT_ORG,
+		"id": conf.get('sub_id'),
+		"domain": "internetofthings.ibmcloud.com",
+		"type": config.WATSON_IOT_DEVICE_TYPE,
+		"auth-method": "token",
+		"auth-token": config.WATSON_IOT_REGISTER_PASSWORD,
+		"enforce-ws": true
+	};
+	const deviceClient = new Client.IotfDevice(deviceConfig);
+	deviceClient.connect();
+	deviceClient.on("command", function (commandName, format, payload, topic) {
+		if (commandName === 'published_message') {
+			payload = JSON.parse(payload);
+			receivedMessagesRealTime.prepend('<b>Topic</b>: ' + payload['topic'] + ', <b>Message</b>: '
+				+ payload['message'] + ', <b>Time</b>: ' + payload['time'] + '</br>');
+		}
+
+	});
+
+	deviceClient.on("error", function (err) {
+		console.error(err)
+	});
 
 }
 

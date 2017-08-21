@@ -55,10 +55,9 @@ function getMessages() {
 	const deviceClient = new Client.IotfDevice(deviceConfig);
 	deviceClient.connect();
 	deviceClient.on("command", function (commandName, format, payload, topic) {
-		console.log("payload" + payload)
-		console.log("topic" + topic)
-		console.log("command name" + commandName);
-
+		if (commandName === 'published_message') {
+			console.log(JSON.parse(payload))
+		}
 	});
 
 	deviceClient.on("error", function (err) {
