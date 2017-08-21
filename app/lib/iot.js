@@ -56,7 +56,6 @@ function getMessages() {
 	deviceClient.connect();
 	deviceClient.on("command", function (commandName, format, payload, topic) {
 		if (commandName === 'published_message') {
-			console.log(JSON.parse(payload))
 		}
 	});
 

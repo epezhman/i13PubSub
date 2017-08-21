@@ -14,6 +14,5 @@ function publish(topics, message) {
 		if (err) {
 			console.error(err)
 		}
-		console.log(body)
 	});
 }

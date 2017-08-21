@@ -25,7 +25,6 @@ function subscribe(topics) {
 		if (err) {
 			console.error(err)
 		}
-		console.log(body)
 	});
 }
 
@@ -40,7 +39,6 @@ function unsubscribe(topics) {
 		if (err) {
 			console.error(err)
 		}
-		console.log(body)
 	});
 }
 
