@@ -7,6 +7,7 @@ module.exports.getMessages = getMessages;
 module.exports.getTopics = getTopics;
 
 const requestp = require('request-promise');
+const iot = require('./iot');
 const request = require('request');
 const config = require('../config');
 const ConfigStore = require('configstore');
@@ -51,6 +52,7 @@ function register() {
 	return requestp(reg_options).then((result) => {
 		if (result.hasOwnProperty('ok')) {
 			conf.set('sub_id', result['sub_id']);
+			iot.register();
 			return true
 		}
 		else {

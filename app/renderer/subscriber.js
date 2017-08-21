@@ -2,6 +2,7 @@
 
 const {remote} = require('electron');
 const subscriber = remote.require('../lib/subscribe');
+const iot = remote.require('../lib/iot');
 const ConfigStore = require('configstore');
 const config = require('../config');
 
@@ -20,6 +21,7 @@ let subConfirmed;
 let unsubConfirmed;
 let alreadySubbedTopics;
 let receivedMessages;
+let receivedMessagesRealTime;
 let registerError;
 
 function subscribeTopics(topics) {
@@ -44,14 +46,19 @@ function getTopics() {
 	setTimeout(getTopics, 1000);
 }
 
-function getMessages() {
+function getMessagesPolling() {
 	let getM = subscriber.getMessages();
 	getM.then((res) => {
 		if (res !== "None") {
 			receivedMessages.prepend('<b>Topic</b>: ' + res[0].topic + ', <b>Message</b>: ' + res[0].message + '<br>');
 		}
 	});
-	setTimeout(getMessages, 1000);
+	setTimeout(getMessagesPolling, 1000);
+}
+
+function getMessagesRealTime() {
+	let getM = iot.getMessages();
+
 }
 
 $(document).ready(() => {
@@ -68,10 +75,12 @@ $(document).ready(() => {
 	unsubConfirmed = $('#unsubed-confirmed');
 	alreadySubbedTopics = $('#already-subbed-topics');
 	receivedMessages = $('#received-messages');
+	receivedMessagesRealTime = $('#received-messages-real-time');
 	registerError = $('#register-error');
 
 	getTopics();
-	getMessages();
+	getMessagesPolling();
+	getMessagesRealTime();
 
 	if (conf.has('sub_id')) {
 		subActions.show();

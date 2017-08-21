@@ -1,6 +1,6 @@
 'use strict';
 
-const secrets = require('./secrets.config')
+const secrets = require('./secrets.config');
 
 
 const appPackage = require('./package.json');
@@ -25,5 +25,13 @@ module.exports = {
 	UNSUBSCRIBE_URL: secrets.UNSUBSCRIBE_URL,
 	GET_TOPICS_URL: secrets.GET_TOPICS_URL,
 	GET_MESSAGES_URL: secrets.GET_MESSAGES_URL,
-	REGISTER_SUBSCRIBER_URL: secrets.REGISTER_SUBSCRIBER_URL
+	REGISTER_SUBSCRIBER_URL: secrets.REGISTER_SUBSCRIBER_URL,
+	WATSON_IOT_REGISTER_URL: secrets.WATSON_IOT_REGISTER_URL,
+
+	WATSON_IOT_REGISTER_PASSWORD: secrets.WATSON_IOT_REGISTER_PASSWORD,
+	WATSON_IOT_API_USERNAME: secrets.WATSON_IOT_API_USERNAME,
+	WATSON_IOT_API_PASSWORD: secrets.WATSON_IOT_API_PASSWORD,
+	WATSON_IOT_ORG: secrets.WATSON_IOT_ORG,
+	WATSON_IOT_DEVICE_TYPE: secrets.WATSON_IOT_DEVICE_TYPE
+
 };
