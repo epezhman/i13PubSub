@@ -26,6 +26,7 @@ let receivedMessagesRealTime;
 let registerError;
 let realTimeMessageCounter;
 let pollMessageCounter;
+let subscriberId;
 
 let counter_real = 0;
 let counter_poll = 0;
@@ -45,55 +46,69 @@ function unsubscribeTopics(topics) {
 }
 
 function getTopics() {
-	let getT = subscriber.getTopics();
-	getT.then((res) => {
-		alreadySubbedTopics.text(res);
-	});
+	if (conf.has('sub_id')) {
+
+		let getT = subscriber.getTopics();
+		getT.then((res) => {
+			alreadySubbedTopics.text(res);
+		});
+	}
 	setTimeout(getTopics, 1000);
 }
 
 function getMessagesPolling() {
-	let getM = subscriber.getMessages();
-	getM.then((result) => {
-		if (result !== "None") {
-			result.forEach((res) => {
-				counter_poll += 1;
-				pollMessageCounter.text(counter_poll);
-				receivedMessages.prepend('<b>Topic</b>: ' + res.topic + ', <b>Message</b>: ' + res.message
-					+ ', <b>Time</b>: ' + res.time + '</br>');
-			});
-		}
-	});
+	if (conf.has('sub_id')) {
+
+		let getM = subscriber.getMessages();
+		getM.then((result) => {
+			if (result !== "None") {
+				result.forEach((res) => {
+					counter_poll += 1;
+					pollMessageCounter.text(counter_poll);
+					receivedMessages.prepend('<b>Topic</b>: ' + res.topic + ', <b>Message</b>: ' + res.message
+						+ ', <b>Time</b>: ' + res.time + '</br>');
+				});
+			}
+		});
+	}
 	setTimeout(getMessagesPolling, 1000);
 }
 
 
 function getMessagesRealTime() {
-	//iot.getMessages()
-	const deviceConfig = {
-		"org": config.WATSON_IOT_ORG,
-		"id": conf.get('sub_id'),
-		"domain": "internetofthings.ibmcloud.com",
-		"type": config.WATSON_IOT_DEVICE_TYPE,
-		"auth-method": "token",
-		"auth-token": config.WATSON_IOT_REGISTER_PASSWORD,
-		"enforce-ws": true
-	};
-	const deviceClient = new Client.IotfDevice(deviceConfig);
-	deviceClient.connect();
-	deviceClient.on("command", function (commandName, format, payload, topic) {
-		if (commandName === 'published_message') {
-			counter_real += 1;
-			realTimeMessageCounter.text(counter_real);
-			payload = JSON.parse(payload);
-			receivedMessagesRealTime.prepend('<b>Topic</b>: ' + payload['topic'] + ', <b>Message</b>: '
-				+ payload['message'] + ', <b>Time</b>: ' + payload['time'] + '</br>');
-		}
-	});
+	if (conf.has('sub_id')) {
+		const deviceConfig = {
+			"org": config.WATSON_IOT_ORG,
+			"id": conf.get('sub_id'),
+			"domain": "internetofthings.ibmcloud.com",
+			"type": config.WATSON_IOT_DEVICE_TYPE,
+			"auth-method": "token",
+			"auth-token": config.WATSON_IOT_REGISTER_PASSWORD,
+			"enforce-ws": true
+		};
+		const deviceClient = new Client.IotfDevice(deviceConfig);
+		deviceClient.connect();
+		deviceClient.on("command", function (commandName, format, payload, topic) {
+			if (commandName === 'published_message') {
+				counter_real += 1;
+				realTimeMessageCounter.text(counter_real);
+				payload = JSON.parse(payload);
+				receivedMessagesRealTime.prepend('<b>Topic</b>: ' + payload['topic'] + ', <b>Message</b>: '
+					+ payload['message'] + ', <b>Time</b>: ' + payload['time'] + '</br>');
+			}
+		});
 
-	deviceClient.on("error", function (err) {
-		console.error(err)
-	});
+		deviceClient.on("error", function (err) {
+			console.error(err)
+		});
+	}
+}
+
+function initFunctions() {
+	getTopics();
+	getMessagesPolling();
+	getMessagesRealTime();
+
 }
 
 $(document).ready(() => {
@@ -112,16 +127,14 @@ $(document).ready(() => {
 	receivedMessages = $('#received-messages');
 	receivedMessagesRealTime = $('#received-messages-real-time');
 	realTimeMessageCounter = $('#real-time-message-counter');
-	pollMessageCounter= $('#polling-message-counter');
+	pollMessageCounter = $('#polling-message-counter');
 	registerError = $('#register-error');
-
-	getTopics();
-	getMessagesPolling();
-	getMessagesRealTime();
-
+	subscriberId = $('#subscriber-id');
 
 	if (conf.has('sub_id')) {
+		initFunctions();
 		subActions.show();
+		subscriberId.val(conf.get('sub_id'))
 	}
 	else {
 		registerSub.show();
@@ -165,8 +178,10 @@ $(document).ready(() => {
 		let reg = subscriber.register();
 		reg.then((res) => {
 			if (res) {
+				initFunctions();
 				registerSub.hide();
 				subActions.show();
+				subscriberId.val(conf.get('sub_id'))
 			}
 			else {
 				unsubConfirmed.show();
@@ -177,9 +192,12 @@ $(document).ready(() => {
 
 	deregisterSub.click((e) => {
 		e.preventDefault();
-		conf.delete('sub_id');
-		registerSub.show();
-		subActions.hide();
+		if (confirm('Are you sure?')) {
+			subscriberId.val('');
+			conf.delete('sub_id');
+			registerSub.show();
+			subActions.hide();
+		}
 	});
 
 });
