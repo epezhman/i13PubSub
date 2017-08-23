@@ -28,8 +28,8 @@ let realTimeMessageCounter;
 let pollMessageCounter;
 let subscriberId;
 
-let counter_real = 0;
-let counter_poll = 0;
+let counterReal = 0;
+let counterPoll = 0;
 
 function subscribeTopics(topics) {
 	subscriber.subscribe(topics);
@@ -56,15 +56,23 @@ function getTopics() {
 	setTimeout(getTopics, 1000);
 }
 
-function getMessagesPolling() {
+function getMessagesPolling(firstRun) {
 	if (conf.has('sub_id')) {
-
 		let getM = subscriber.getMessages();
 		getM.then((result) => {
 			if (result !== "None") {
+				if(firstRun)
+				{
+					result.forEach((res) => {
+						counterReal += 1;
+						realTimeMessageCounter.text(counterReal);
+						receivedMessagesRealTime.prepend('<b>Topic</b>: ' + res.topic + ', <b>Message</b>: '
+							+ res.message + ', <b>Time</b>: ' + res.time + '</br>');
+					});
+				}
 				result.forEach((res) => {
-					counter_poll += 1;
-					pollMessageCounter.text(counter_poll);
+					counterPoll += 1;
+					pollMessageCounter.text(counterPoll);
 					receivedMessages.prepend('<b>Topic</b>: ' + res.topic + ', <b>Message</b>: ' + res.message
 						+ ', <b>Time</b>: ' + res.time + '</br>');
 				});
@@ -73,7 +81,6 @@ function getMessagesPolling() {
 	}
 	setTimeout(getMessagesPolling, 1000);
 }
-
 
 function getMessagesRealTime() {
 	if (conf.has('sub_id')) {
@@ -90,8 +97,8 @@ function getMessagesRealTime() {
 		deviceClient.connect();
 		deviceClient.on("command", function (commandName, format, payload, topic) {
 			if (commandName === 'published_message') {
-				counter_real += 1;
-				realTimeMessageCounter.text(counter_real);
+				counterReal += 1;
+				realTimeMessageCounter.text(counterReal);
 				payload = JSON.parse(payload);
 				receivedMessagesRealTime.prepend('<b>Topic</b>: ' + payload['topic'] + ', <b>Message</b>: '
 					+ payload['message'] + ', <b>Time</b>: ' + payload['time'] + '</br>');
@@ -104,9 +111,9 @@ function getMessagesRealTime() {
 	}
 }
 
-function initFunctions() {
+function initFunctions(firstRun) {
 	getTopics();
-	getMessagesPolling();
+	getMessagesPolling(firstRun);
 	getMessagesRealTime();
 
 }
@@ -132,7 +139,7 @@ $(document).ready(() => {
 	subscriberId = $('#subscriber-id');
 
 	if (conf.has('sub_id')) {
-		initFunctions();
+		initFunctions(true);
 		subActions.show();
 		subscriberId.val(conf.get('sub_id'))
 	}
@@ -192,6 +199,7 @@ $(document).ready(() => {
 
 	deregisterSub.click((e) => {
 		e.preventDefault();
+		//subscriber.testRegister();
 		if (confirm('Are you sure?')) {
 			subscriberId.val('');
 			conf.delete('sub_id');

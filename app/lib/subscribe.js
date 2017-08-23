@@ -3,6 +3,7 @@
 module.exports.subscribe = subscribe;
 module.exports.unsubscribe = unsubscribe;
 module.exports.register = register;
+module.exports.testRegister = testRegister;
 module.exports.getMessages = getMessages;
 module.exports.getTopics = getTopics;
 
@@ -50,7 +51,27 @@ function register() {
 	return requestp(reg_options).then((result) => {
 		if (result.hasOwnProperty('ok')) {
 			conf.set('sub_id', result['sub_id']);
-			iot.register();
+			iot.register(result['sub_id']);
+			return true
+		}
+		else {
+			return false
+		}
+	}).catch((err) => {
+		return false
+	});
+}
+
+
+function testRegister() {
+	let reg_options = {
+		uri: config.REGISTER_SUBSCRIBER_URL,
+		json: true
+	};
+	return requestp(reg_options).then((result) => {
+		if (result.hasOwnProperty('ok')) {
+			console.log(result['sub_id']);
+			iot.register(result['sub_id']);
 			return true
 		}
 		else {

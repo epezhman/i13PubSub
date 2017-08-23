@@ -20,7 +20,7 @@ const deviceConfig = {
 	"enforce-ws": true
 };
 
-function register() {
+function register(sub_id) {
 	request({
 		uri: config.WATSON_IOT_REGISTER_URL,
 		headers: {
@@ -34,9 +34,9 @@ function register() {
 		body: JSON.stringify([
 			{
 				"typeId": config.WATSON_IOT_DEVICE_TYPE,
-				"deviceId": conf.get('sub_id'),
+				"deviceId": sub_id,
 				"deviceInfo": {
-					"serialNumber": conf.get('sub_id')
+					"serialNumber": sub_id
 				},
 				"metadata": {},
 				"authToken": config.WATSON_IOT_REGISTER_PASSWORD
