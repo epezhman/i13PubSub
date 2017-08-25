@@ -53,7 +53,7 @@ function getTopics() {
 			alreadySubbedTopics.text(res);
 		});
 	}
-	setTimeout(getTopics, 1000);
+	setTimeout(getTopics, 2000);
 }
 
 function getMessagesPolling(firstRun) {
@@ -79,7 +79,7 @@ function getMessagesPolling(firstRun) {
 			}
 		});
 	}
-	setTimeout(getMessagesPolling, 1000);
+	setTimeout(getMessagesPolling, 2000);
 }
 
 function getMessagesRealTime() {
