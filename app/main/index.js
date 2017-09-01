@@ -10,6 +10,8 @@ require('electron-debug')();
 // Prevent window being garbage collected
 let publishWindow;
 let subscribeWindow;
+let chatWindow;
+let chatRoomWindow;
 
 function onClosedPublish() {
 	publishWindow = null;
@@ -20,7 +22,7 @@ function createPublishWindow() {
 		backgroundColor: '#ECECEC',
 		center: true,
 		title: "i13 Publisher",
-		icon: "../ assets/img/p.png",
+		icon: "../assets/img/p.png",
 		useContentSize: true,
 		width: 800,
 		height: 500,
@@ -43,7 +45,7 @@ function createSubscribeWindow() {
 		backgroundColor: '#ECECEC',
 		center: true,
 		title: "i13 Subscriber",
-		icon: "../ assets/img/s.png",
+		icon: "../assets/img/s.png",
 		useContentSize: true,
 		width: 800,
 		height: 900,
@@ -53,6 +55,52 @@ function createSubscribeWindow() {
 
 	win.loadURL(`file://${__dirname}/../renderer/subscribe.html`);
 	win.on('closed', onClosedSubscribe);
+
+	return win;
+}
+
+function onClosedChatRoom() {
+	chatRoomWindow = null;
+}
+
+function createChatRoomWindow() {
+	const win = new electron.BrowserWindow({
+		backgroundColor: '#ECECEC',
+		center: true,
+		title: "i13 Serverless Chat Room",
+		icon: "../assets/img/p.png",
+		useContentSize: true,
+		width: 400,
+		height: 600,
+		x: 0,
+		y: 0
+	});
+
+	win.loadURL(`file://${__dirname}/../renderer/chat-room.html`);
+	win.on('closed', onClosedChat);
+
+	return win;
+}
+
+function onClosedChat() {
+	chatWindow = null;
+}
+
+function createChatWindow() {
+	const win = new electron.BrowserWindow({
+		backgroundColor: '#ECECEC',
+		center: true,
+		title: "i13 Serverless Chat",
+		icon: "../assets/img/p.png",
+		useContentSize: true,
+		width: 400,
+		height: 600,
+		x: 950,
+		y: 0
+	});
+
+	win.loadURL(`file://${__dirname}/../renderer/chat.html`);
+	win.on('closed', onClosedChat);
 
 	return win;
 }
@@ -76,6 +124,8 @@ app.on('activate', () => {
 });
 
 app.on('ready', () => {
-	publishWindow = createPublishWindow();
-	subscribeWindow = createSubscribeWindow();
+	chatWindow = createChatWindow();
+	chatRoomWindow = createChatRoomWindow();
+	// publishWindow = createPublishWindow();
+	// subscribeWindow = createSubscribeWindow();
 });

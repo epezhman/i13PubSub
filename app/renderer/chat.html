@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>i13 Serverless Chat</title>
+	<link rel="shortcut icon" href="../assets/img/p.png">
+	<link rel="stylesheet" href="../assets/stylesheets/photon/css/photon.css">
+	<link href="../assets/stylesheets/css/main.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="window">
+	<header class="toolbar toolbar-header">
+		<h1 class="title">i13 Serverless Chat</h1>
+	</header>
+	<div class="window-content">
+		<div class="pane-group">
+			<div class="pane">
+				<div class="publisher-container">
+					<h3>Join or Create a Room!</h3>
+					<hr>
+					<h5>Please first sign up:</h5>
+					<div class="form-group">
+						<label>Username</label>
+						<input class="form-control" placeholder="Username" id="username" required>
+					</div>
+					<button type="button" class="btn btn-form btn-primary" id="join-system">Sign Up</button>
+					<h5>Welcome ePezhman :)</h5>
+					<hr>
+					<div class="form-group">
+						<label>Chat Room Name</label>
+						<input class="form-control" placeholder="Chat Room Name" id="chat-room-name" required>
+					</div>
+					<button type="button" class="btn btn-form btn-primary" id="submit-chat-room">Create Chat Room</button>
+					<hr>
+					<h5>Available Chat Rooms:</h5>
+					<table>
+						<thead>
+						<tr>
+							<th>
+								Name
+							</th>
+							<th>
+								Action
+							</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>
+								<b>Test</b>
+							</td>
+							<td>
+								<button type="button" class="btn btn-mini btn-primary join-chatroom" >Join</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	if (typeof module === 'object') {
+		window.module = module;
+		module = undefined;
+	}
+</script>
+<script src="../node_modules/jquery/dist/jquery.js"></script>
+<script src="chat.js"></script>
+</body>
+</html>
