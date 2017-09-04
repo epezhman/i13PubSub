@@ -2,6 +2,10 @@
 
 const {remote} = require('electron');
 const publish = remote.require('../lib/publish');
+const ConfigStore = require('configstore');
+const config = require('../config');
+
+const conf = new ConfigStore(config.APP_SHORT_NAME);
 
 let pubTopics;
 let pubMessage;
@@ -11,9 +15,10 @@ let pubSubmitCounter;
 let pubSpanCounter;
 let pubPublished;
 let publishStateless;
+let supportPolling;
 
 function publishMessage(topics, message) {
-	publish(topics, message, publishStateless.is(':checked'));
+	publish(topics, message, publishStateless.is(':checked'), supportPolling.is(':checked'));
 	//pubForm[0].reset();
 	pubPublished.show();
 	pubPublished.hide(2000);
@@ -29,8 +34,22 @@ $(document).ready(() => {
 	pubSubmitCounter = $('#pub-submit-counter');
 	pubSpanCounter = $('#counter-span');
 	publishStateless = $('#publish-stateless');
+	supportPolling = $('#support-polling');
 
 	let counter = 0;
+
+	if (conf.get('stateless')) {
+		publishStateless.prop('checked', true);
+	}
+
+	publishStateless.on('change', () => {
+		if (publishStateless.is(':checked')) {
+			conf.set('stateless', true);
+		}
+		else {
+			conf.set('stateless', false);
+		}
+	});
 
 	pubForm.on('submit', (e) => {
 		e.preventDefault();

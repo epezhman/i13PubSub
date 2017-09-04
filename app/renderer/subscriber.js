@@ -173,7 +173,6 @@ $(document).ready(() => {
 		}
 	});
 
-
 	unsubForm.on('submit', (e) => {
 		e.preventDefault();
 		let topics = unsubTopics.val().trim();
@@ -206,7 +205,6 @@ $(document).ready(() => {
 			}
 		})
 	});
-
 
 	deregisterSub.click((e) => {
 		e.preventDefault();

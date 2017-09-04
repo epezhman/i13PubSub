@@ -70,7 +70,7 @@ function testRegister() {
 	};
 	return requestp(reg_options).then((result) => {
 		if (result.hasOwnProperty('ok')) {
-			console.log( `'${result['sub_id']}',`);
+			console.log(`'${result['sub_id']}',`);
 			iot.register(result['sub_id']);
 			return true
 		}
@@ -106,7 +106,8 @@ function getMessages() {
 	let reg_options = {
 		uri: config.GET_MESSAGES_URL,
 		qs: {
-			subscriber_id: conf.get('sub_id')
+			subscriber_id: conf.get('sub_id'),
+			stateless: !!conf.get('stateless')
 		},
 		json: true
 	};
