@@ -61,8 +61,7 @@ function getMessagesPolling(firstRun) {
 		let getM = subscriber.getMessages();
 		getM.then((result) => {
 			if (result !== "None") {
-				if(firstRun)
-				{
+				if (firstRun) {
 					result.forEach((res) => {
 						counterReal += 1;
 						realTimeMessageCounter.text(counterReal);
@@ -116,6 +115,16 @@ function initFunctions(firstRun) {
 	getMessagesPolling(firstRun);
 	getMessagesRealTime();
 
+}
+
+let regCounter = 100;
+
+function autoReg() {
+	subscriber.testRegister();
+	regCounter -= 1;
+	if (regCounter > 0) {
+		setTimeout(autoReg, 1000);
+	}
 }
 
 $(document).ready(() => {
@@ -197,15 +206,16 @@ $(document).ready(() => {
 		})
 	});
 
+
 	deregisterSub.click((e) => {
 		e.preventDefault();
-		//subscriber.testRegister();
-		if (confirm('Are you sure?')) {
-			subscriberId.val('');
-			conf.delete('sub_id');
-			registerSub.show();
-			subActions.hide();
-		}
+		autoReg();
+		// if (confirm('Are you sure?')) {
+		// 	subscriberId.val('');
+		// 	conf.delete('sub_id');
+		// 	registerSub.show();
+		// 	subActions.hide();
+		// }
 	});
 
 });

@@ -124,8 +124,8 @@ app.on('activate', () => {
 });
 
 app.on('ready', () => {
-	chatWindow = createChatWindow();
-	chatRoomWindow = createChatRoomWindow();
-	// publishWindow = createPublishWindow();
-	// subscribeWindow = createSubscribeWindow();
+	// chatWindow = createChatWindow();
+	// chatRoomWindow = createChatRoomWindow();
+	publishWindow = createPublishWindow();
+	subscribeWindow = createSubscribeWindow();
 });
