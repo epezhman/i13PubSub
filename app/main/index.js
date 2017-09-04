@@ -25,7 +25,7 @@ function createPublishWindow() {
 		icon: "../assets/img/p.png",
 		useContentSize: true,
 		width: 800,
-		height: 500,
+		height: 550,
 		x: 0,
 		y: 0
 	});

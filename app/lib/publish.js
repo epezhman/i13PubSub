@@ -6,9 +6,9 @@ const config = require('../config');
 
 module.exports = publish;
 
-function publish(topics, message) {
+function publish(topics, message, stateless) {
 	request.post({
-		url: config.PUBLISH_URL,
+		url: stateless ? config.PUBLISH_STATELESS_URL : config.PUBLISH_URL,
 		form: {topics: topics, message: message}
 	}, (err, httpResponse, body) => {
 		if (err) {

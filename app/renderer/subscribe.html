@@ -21,12 +21,14 @@
 					<button type="button" class="btn btn-form btn-primary" id="register-sub" style="display: none">
 						Register Subscriber
 					</button>
-					<button type="button" class="btn btn-form btn-warning" id="deregister-sub" style="">
+					<button type="button" class="btn btn-form btn-warning" id="deregister-sub" style=" display: none">
 						Detach this Subscriber ID
 					</button>
-					<br>
-					<br>
-					<div>Subscriber ID: <input class="form-control" id="subscriber-id" ></div>
+					<div style="display: none">
+						<br>
+						<br>
+						<div>Subscriber ID: <input class="form-control" id="subscriber-id"></div>
+					</div>
 					<p class="help-block" id="register-error" style="display: none">Could not register, Try again</p>
 					<hr>
 					<div id="subscriber-actions" style="display: none;">
@@ -65,6 +67,11 @@
 						<h4>Subscribed Topics</h4>
 						<p class="subs-topics" id="already-subbed-topics">None</p>
 						<hr>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" checked="checked" id="enable-polling"> Enable Polling
+							</label>
+						</div>
 						<h4>Messages</h4>
 						<table>
 							<thead>
@@ -84,7 +91,6 @@
 							</tr>
 							</tbody>
 						</table>
-
 					</div>
 				</div>
 			</div>

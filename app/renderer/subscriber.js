@@ -27,6 +27,7 @@ let registerError;
 let realTimeMessageCounter;
 let pollMessageCounter;
 let subscriberId;
+let enablePolling;
 
 let counterReal = 0;
 let counterPoll = 0;
@@ -46,8 +47,7 @@ function unsubscribeTopics(topics) {
 }
 
 function getTopics() {
-	if (conf.has('sub_id')) {
-
+	if (conf.has('sub_id') && enablePolling.is(':checked')) {
 		let getT = subscriber.getTopics();
 		getT.then((res) => {
 			alreadySubbedTopics.text(res);
@@ -57,7 +57,7 @@ function getTopics() {
 }
 
 function getMessagesPolling(firstRun) {
-	if (conf.has('sub_id')) {
+	if (conf.has('sub_id') && enablePolling.is(':checked')) {
 		let getM = subscriber.getMessages();
 		getM.then((result) => {
 			if (result !== "None") {
@@ -146,6 +146,7 @@ $(document).ready(() => {
 	pollMessageCounter = $('#polling-message-counter');
 	registerError = $('#register-error');
 	subscriberId = $('#subscriber-id');
+	enablePolling = $('#enable-polling');
 
 	if (conf.has('sub_id')) {
 		initFunctions(true);
@@ -209,13 +210,13 @@ $(document).ready(() => {
 
 	deregisterSub.click((e) => {
 		e.preventDefault();
-		autoReg();
-		// if (confirm('Are you sure?')) {
-		// 	subscriberId.val('');
-		// 	conf.delete('sub_id');
-		// 	registerSub.show();
-		// 	subActions.hide();
-		// }
+		//autoReg();
+		if (confirm('Are you sure?')) {
+			subscriberId.val('');
+			conf.delete('sub_id');
+			registerSub.show();
+			subActions.hide();
+		}
 	});
 
 });
