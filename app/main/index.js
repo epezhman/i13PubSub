@@ -1,6 +1,6 @@
 'use strict';
-const electron = require('electron');
 
+const electron = require('electron');
 
 const app = electron.app;
 
@@ -10,8 +10,6 @@ require('electron-debug')();
 // Prevent window being garbage collected
 let publishWindow;
 let subscribeWindow;
-let chatWindow;
-let chatRoomWindow;
 
 function onClosedPublish() {
 	publishWindow = null;
@@ -25,7 +23,7 @@ function createPublishWindow() {
 		icon: "../assets/img/p.png",
 		useContentSize: true,
 		width: 800,
-		height: 550,
+		height: 700,
 		x: 0,
 		y: 0
 	});
@@ -59,52 +57,6 @@ function createSubscribeWindow() {
 	return win;
 }
 
-function onClosedChatRoom() {
-	chatRoomWindow = null;
-}
-
-function createChatRoomWindow() {
-	const win = new electron.BrowserWindow({
-		backgroundColor: '#ECECEC',
-		center: true,
-		title: "i13 Serverless Chat Room",
-		icon: "../assets/img/p.png",
-		useContentSize: true,
-		width: 400,
-		height: 600,
-		x: 0,
-		y: 0
-	});
-
-	win.loadURL(`file://${__dirname}/../renderer/chat-room.html`);
-	win.on('closed', onClosedChat);
-
-	return win;
-}
-
-function onClosedChat() {
-	chatWindow = null;
-}
-
-function createChatWindow() {
-	const win = new electron.BrowserWindow({
-		backgroundColor: '#ECECEC',
-		center: true,
-		title: "i13 Serverless Chat",
-		icon: "../assets/img/p.png",
-		useContentSize: true,
-		width: 400,
-		height: 600,
-		x: 950,
-		y: 0
-	});
-
-	win.loadURL(`file://${__dirname}/../renderer/chat.html`);
-	win.on('closed', onClosedChat);
-
-	return win;
-}
-
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
 		app.quit();
@@ -124,8 +76,6 @@ app.on('activate', () => {
 });
 
 app.on('ready', () => {
-	// chatWindow = createChatWindow();
-	// chatRoomWindow = createChatRoomWindow();
 	publishWindow = createPublishWindow();
 	subscribeWindow = createSubscribeWindow();
 });

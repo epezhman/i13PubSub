@@ -9,17 +9,26 @@ const conf = new ConfigStore(config.APP_SHORT_NAME);
 
 let pubTopics;
 let pubMessage;
-let pubForm;
 let pubSubmit;
 let pubSubmitCounter;
 let pubSpanCounter;
 let pubPublished;
 let publishStateless;
 let supportPolling;
+let pubErrorTopicsMissing;
+let pubErrorPredicatesMissing;
+let pubErrorMessageMissing;
+let predicatesArea;
+let selectedPubType;
 
-function publishMessage(topics, message) {
-	publish(topics, message, publishStateless.is(':checked'), supportPolling.is(':checked'));
-	//pubForm[0].reset();
+function publishTopicBasedMessage(topics, message) {
+	publish.publishTopicsBased(topics, message, publishStateless.is(':checked'), supportPolling.is(':checked'));
+	pubPublished.show();
+	pubPublished.hide(2000);
+}
+
+function publishContentBasedMessage(predicates, message) {
+	publish.publishContentsBased(predicates, message);
 	pubPublished.show();
 	pubPublished.hide(2000);
 }
@@ -28,13 +37,17 @@ $(document).ready(() => {
 
 	pubTopics = $('#pub-topics');
 	pubMessage = $('#pub-message');
-	pubForm = $('#pub-form');
 	pubSubmit = $('#pub-submit');
 	pubPublished = $('#pub-published');
 	pubSubmitCounter = $('#pub-submit-counter');
 	pubSpanCounter = $('#counter-span');
 	publishStateless = $('#publish-stateless');
 	supportPolling = $('#support-polling');
+	pubErrorMessageMissing = $('#pub-error-message');
+	pubErrorPredicatesMissing = $('#pub-error-predicates');
+	pubErrorTopicsMissing = $('#pub-error-topics');
+	predicatesArea = $('#predicates');
+	selectedPubType = $('input[name=radioName]:checked');
 
 	let counter = 0;
 
@@ -51,31 +64,53 @@ $(document).ready(() => {
 		}
 	});
 
-	pubForm.on('submit', (e) => {
-		e.preventDefault();
-		let topics = pubTopics.val().trim();
-		let message = pubMessage.val().trim();
-		if (topics && message) {
-			publishMessage(topics, message);
-		}
-	});
-
 	pubSubmit.click((e) => {
 		e.preventDefault();
 		let topics = pubTopics.val().trim();
+		let predicates = predicatesArea.val().trim();
 		let message = pubMessage.val().trim();
-		if (topics && message) {
-			publishMessage(topics, message);
+		if (!topics && selectedPubType.val() === 'topic') {
+			pubErrorMessageMissing.show();
+			pubErrorMessageMissing.hide(2000);
+		}
+		if (!predicates && selectedPubType.val() === 'content') {
+			pubErrorPredicatesMissing.show();
+			pubErrorPredicatesMissing.hide(2000);
+		}
+		if (!message) {
+			pubErrorMessageMissing.show();
+			pubErrorMessageMissing.hide(2000);
+		}
+		if (topics && message && selectedPubType.val() === 'topic') {
+			publishTopicBasedMessage(topics, message);
+		}
+		if (predicates && message && selectedPubType.val() === 'content') {
+			publishContentBasedMessage(predicates, message);
 		}
 	});
 
 	pubSubmitCounter.click((e) => {
 		e.preventDefault();
 		let topics = pubTopics.val().trim();
-		if (topics) {
+		let predicates = predicatesArea.val().trim();
+		if (!topics && selectedPubType.val() === 'topic') {
+			pubErrorMessageMissing.show();
+			pubErrorMessageMissing.hide(2000);
+		}
+		if (!predicates && selectedPubType.val() === 'content') {
+			pubErrorPredicatesMissing.show();
+			pubErrorPredicatesMissing.hide(2000);
+		}
+		if (topics  && selectedPubType.val() === 'topic') {
 			counter += 1;
 			pubSpanCounter.text(counter);
-			publishMessage(topics, counter.toString());
+			publishTopicBasedMessage(topics, counter.toString());
+		}
+		if (predicates  && selectedPubType.val() === 'content') {
+			counter += 1;
+			pubSpanCounter.text(counter);
+			publishContentBasedMessage(predicates, counter.toString());
 		}
 	});
+
 });

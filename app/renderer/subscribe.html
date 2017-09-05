@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,54 +25,101 @@
 						Detach this Subscriber ID
 					</button>
 					<div style="">
-						<br>
-						<div>Subscriber ID: <input class="form-control" id="subscriber-id"></div>
+						<div>Subscriber ID: <input class="form-control" id="subscriber-id"</div>
 					</div>
 					<p class="help-block" id="register-error" style="display: none">Could not register, Try again</p>
 					<hr>
 					<div id="subscriber-actions" style="display: none;">
-						<form id="sub-form" disabled="disabled">
-							<div class="form-group">
-								<label>Topics to Subscribe</label>
-								<input class="form-control" placeholder="Topics to Subscribe" id="sub-topics" required>
-								<p class="help-block">The topics can be separated by comma</p>
-							</div>
-							<div class="form-actions">
-								<button type="button" class="btn btn-form btn-primary" id="sub-submit">Subscribe
-								</button>
-							</div>
-							<div class=form-control"">
-								<p class="help-block" id="subbed-confirmed" style="display: none">Topics Subscribed!</p>
-							</div>
-						</form>
+						<table>
+							<tr>
+								<td valign="top" class="td-topics">
+									<h4>Topic-Based Matching</h4>
+									<form id="sub-form" disabled="disabled">
+										<div class="form-group">
+											<label>Topics to Subscribe</label>
+											<br>
+											<input class="form-control" placeholder="Topics to Subscribe"
+												   id="sub-topics"
+												   required>
+											<p class="help-block">The topics can be separated by comma</p>
+										</div>
+										<div class="form-actions">
+											<button type="button" class="btn btn-form btn-primary" id="sub-submit">
+												Subscribe
+											</button>
+										</div>
+										<div class=form-control"">
+											<p class="help-block" id="subbed-confirmed" style="display: none">Topics
+												Subscribed!</p>
+										</div>
+									</form>
+									<hr>
+									<form id="unsub-form">
+										<div class="form-group">
+											<label>Topics to Unsubscribe</label>
+											<br>
+											<input class="form-control" placeholder="Topics to Unsubscribe"
+												   id="unsub-topics"
+												   required>
+											<p class="help-block">The topics can be separated by comma</p>
+										</div>
+										<div class="form-actions">
+											<button type="button" class="btn btn-form btn-primary" id="unsub-submit">
+												Unsubscribe
+											</button>
+										</div>
+										<div class=form-control"">
+											<p class="help-block" id="unsubed-confirmed" style="display: none">Topics
+												Unsubscribed!</p>
+										</div>
+									</form>
+									<hr>
+									<h6>Subscribed Topics</h6>
+									<p class="subs-topics" id="already-subbed-topics">None</p>
+								</td>
+								<td valign="top" class="td-predicates">
+									<h4>Content-Based Matching</h4>
+									<form id="content-form">
+										<div class="form-group">
+											<label>Subscribed Predicate</label>
+											<br>
+											<textarea class="form-control" rows="5" id="predicates"
+													  placeholder="Predicates"
+													  required></textarea>
+											<p class="help-block">
+												Example: Stock=IBM,Price>100
+												<br>
+												Accepted operators: =, <, <=, >, >=
+											</p>
+										</div>
+										<div class="form-actions">
+											<button type="button" class="btn btn-form btn-primary"
+													id="predicate-submit">
+												Subscribe
+											</button>
+											<p class="help-block">New predicates will overwrite the previous ones.
+												<br> Empty submissions will remove all the predicates</p>
+										</div>
+										<div class=form-control"">
+											<p class="help-block" id="predicates-confirmed" style="display: none">
+												Predicted Submitted!</p>
+										</div>
+									</form>
+									<hr>
+									<h6>Subscribed Predicates</h6>
+									<p class="subs-topics" id="subbed-predicates">None</p>
+								</td>
+							</tr>
+						</table>
 						<hr>
-						<form id="unsub-form">
-							<div class="form-group">
-								<label>Topics to Unsubscribe</label>
-								<input class="form-control" placeholder="Topics to Unsubscribe" id="unsub-topics"
-									   required>
-								<p class="help-block">The topics can be separated by comma</p>
-							</div>
-							<div class="form-actions">
-								<button type="button" class="btn btn-form btn-primary" id="unsub-submit">Unsubscribe
-								</button>
-							</div>
-							<div class=form-control"">
-								<p class="help-block" id="unsubed-confirmed" style="display: none">Topics
-									Unsubscribed!</p>
-							</div>
-						</form>
-						<hr>
-						<h4>Subscribed Topics</h4>
-						<p class="subs-topics" id="already-subbed-topics">None</p>
-						<hr>
-						<div class="checkbox">
+						<div class="checkbox" style="display: none;">
 							<label>
 								<input type="checkbox" checked="checked" id="enable-polling"> Enable Polling
 							</label>
 						</div>
-						<h4>Messages</h4>
-						<table>
+						<h4>Publications</h4>
+						<p class="sub-messages" id="received-messages-real-time"></p>
+						<table style="display: none">
 							<thead>
 							<tr>
 								<th>Polling (number of messages: <span id="polling-message-counter">0</span>)</th>
@@ -85,7 +132,7 @@
 									<p class="sub-messages" id="received-messages"></p>
 								</td>
 								<td>
-									<p class="sub-messages" id="received-messages-real-time"></p>
+									<p class="sub-messages" id="_received-messages-real-time"></p>
 								</td>
 							</tr>
 							</tbody>
