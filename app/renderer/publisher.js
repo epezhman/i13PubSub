@@ -19,7 +19,6 @@ let pubErrorTopicsMissing;
 let pubErrorPredicatesMissing;
 let pubErrorMessageMissing;
 let predicatesArea;
-let selectedPubType;
 
 function publishTopicBasedMessage(topics, message) {
 	publish.publishTopicsBased(topics, message, publishStateless.is(':checked'), supportPolling.is(':checked'));
@@ -47,7 +46,6 @@ $(document).ready(() => {
 	pubErrorPredicatesMissing = $('#pub-error-predicates');
 	pubErrorTopicsMissing = $('#pub-error-topics');
 	predicatesArea = $('#predicates');
-	selectedPubType = $('input[name=radioName]:checked');
 
 	let counter = 0;
 
@@ -66,14 +64,15 @@ $(document).ready(() => {
 
 	pubSubmit.click((e) => {
 		e.preventDefault();
+		let selectedPubType = $('input[name=publish-type]:checked').val();
 		let topics = pubTopics.val().trim();
 		let predicates = predicatesArea.val().trim();
 		let message = pubMessage.val().trim();
-		if (!topics && selectedPubType.val() === 'topic') {
-			pubErrorMessageMissing.show();
-			pubErrorMessageMissing.hide(2000);
+		if (!topics && selectedPubType === 'topic') {
+			pubErrorTopicsMissing.show();
+			pubErrorTopicsMissing.hide(2000);
 		}
-		if (!predicates && selectedPubType.val() === 'content') {
+		if (!predicates && selectedPubType === 'content') {
 			pubErrorPredicatesMissing.show();
 			pubErrorPredicatesMissing.hide(2000);
 		}
@@ -81,32 +80,33 @@ $(document).ready(() => {
 			pubErrorMessageMissing.show();
 			pubErrorMessageMissing.hide(2000);
 		}
-		if (topics && message && selectedPubType.val() === 'topic') {
+		if (topics && message && selectedPubType === 'topic') {
 			publishTopicBasedMessage(topics, message);
 		}
-		if (predicates && message && selectedPubType.val() === 'content') {
+		if (predicates && message && selectedPubType === 'content') {
 			publishContentBasedMessage(predicates, message);
 		}
 	});
 
 	pubSubmitCounter.click((e) => {
 		e.preventDefault();
+		let selectedPubType = $('input[name=publish-type]:checked').val();
 		let topics = pubTopics.val().trim();
 		let predicates = predicatesArea.val().trim();
-		if (!topics && selectedPubType.val() === 'topic') {
-			pubErrorMessageMissing.show();
-			pubErrorMessageMissing.hide(2000);
+		if (!topics && selectedPubType === 'topic') {
+			pubErrorTopicsMissing.show();
+			pubErrorTopicsMissing.hide(2000);
 		}
-		if (!predicates && selectedPubType.val() === 'content') {
+		if (!predicates && selectedPubType === 'content') {
 			pubErrorPredicatesMissing.show();
 			pubErrorPredicatesMissing.hide(2000);
 		}
-		if (topics  && selectedPubType.val() === 'topic') {
+		if (topics && selectedPubType === 'topic') {
 			counter += 1;
 			pubSpanCounter.text(counter);
 			publishTopicBasedMessage(topics, counter.toString());
 		}
-		if (predicates  && selectedPubType.val() === 'content') {
+		if (predicates && selectedPubType === 'content') {
 			counter += 1;
 			pubSpanCounter.text(counter);
 			publishContentBasedMessage(predicates, counter.toString());

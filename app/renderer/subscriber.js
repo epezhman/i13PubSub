@@ -2,7 +2,7 @@
 
 const {remote} = require('electron');
 const subscriber = remote.require('../lib/subscribe');
-const iot = remote.require('../lib/iot');
+const utils = remote.require('../lib/utils');
 const ConfigStore = require('configstore');
 const config = require('../config');
 const Client = require("ibmiotf");
@@ -28,9 +28,13 @@ let realTimeMessageCounter;
 let pollMessageCounter;
 let subscriberId;
 let enablePolling;
+let subscribedPredicates;
+let predicateSubmit;
+let predicatesConfirmed;
+let predicatesFormatError;
+let storedPredicates;
 
 let counterReal = 0;
-let counterPoll = 0;
 
 function subscribeTopics(topics) {
 	subscriber.subscribe(topics);
@@ -46,39 +50,39 @@ function unsubscribeTopics(topics) {
 	unsubConfirmed.hide(2000);
 }
 
-function getTopics() {
-	if (conf.has('sub_id') && enablePolling.is(':checked')) {
+function getTopics(manual) {
+	if (conf.has('sub_id')) {
 		let getT = subscriber.getTopics();
 		getT.then((res) => {
 			alreadySubbedTopics.text(res);
 		});
 	}
-	setTimeout(getTopics, 2000);
+	if (!manual) {
+		setTimeout(getTopics, 2000);
+	}
 }
 
-function getMessagesPolling(firstRun) {
-	if (conf.has('sub_id') && enablePolling.is(':checked')) {
+function updateLastSeen() {
+	if (conf.has('sub_id')) {
+		subscriber.updateLastSeen();
+	}
+	setTimeout(updateLastSeen, 2000);
+}
+
+function getMessagesPolling() {
+	if (conf.has('sub_id')) {
 		let getM = subscriber.getMessages();
 		getM.then((result) => {
 			if (result !== "None") {
-				if (firstRun) {
-					result.forEach((res) => {
-						counterReal += 1;
-						realTimeMessageCounter.text(counterReal);
-						receivedMessagesRealTime.prepend('<b>Topic</b>: ' + res.topic + ', <b>Message</b>: '
-							+ res.message + ', <b>Time</b>: ' + res.time + '</br>');
-					});
-				}
 				result.forEach((res) => {
-					counterPoll += 1;
-					pollMessageCounter.text(counterPoll);
-					receivedMessages.prepend('<b>Topic</b>: ' + res.topic + ', <b>Message</b>: ' + res.message
-						+ ', <b>Time</b>: ' + res.time + '</br>');
+					counterReal += 1;
+					realTimeMessageCounter.text(counterReal);
+					receivedMessagesRealTime.prepend('<b>Topic</b>: ' + res.topic + ', <b>Message</b>: '
+						+ res.message + ', <b>Time</b>: ' + res.time + '</br>');
 				});
 			}
 		});
 	}
-	setTimeout(getMessagesPolling, 2000);
 }
 
 function getMessagesRealTime() {
@@ -110,9 +114,11 @@ function getMessagesRealTime() {
 	}
 }
 
-function initFunctions(firstRun) {
-	getTopics();
-	getMessagesPolling(firstRun);
+function initFunctions() {
+	conf.set('stateless', true);
+	// getTopics();
+	// getMessagesPolling();
+	// setTimeout(updateLastSeen, 5000);
 	getMessagesRealTime();
 
 }
@@ -147,9 +153,18 @@ $(document).ready(() => {
 	registerError = $('#register-error');
 	subscriberId = $('#subscriber-id');
 	enablePolling = $('#enable-polling');
+	subscribedPredicates = $('#predicates');
+	storedPredicates = $('#subbed-predicates');
+	predicateSubmit = $('#predicate-submit');
+	predicatesConfirmed = $('#predicates-confirmed');
+	predicatesFormatError = $('#predicates-format-error');
+
+	if (conf.has('predicates')) {
+		storedPredicates.text(conf.get('predicates'));
+	}
 
 	if (conf.has('sub_id')) {
-		initFunctions(true);
+		initFunctions();
 		subActions.show();
 		subscriberId.val(conf.get('sub_id'))
 	}
@@ -187,6 +202,38 @@ $(document).ready(() => {
 		if (topics) {
 			unsubscribeTopics(topics);
 		}
+	});
+
+	predicateSubmit.click((e) => {
+		e.preventDefault();
+		let predicates = subscribedPredicates.val().trim();
+		if (predicates.length) {
+			let jsonPredicate = utils.JSONifySubscriberPredicates(predicates);
+			console.log(jsonPredicate)
+			if (jsonPredicate) {
+				subscriber.subscribePredicates(jsonPredicate);
+				subscribedPredicates.val('');
+				conf.set('predicates', predicates);
+				storedPredicates.text(predicates);
+				predicatesConfirmed.show();
+				predicatesConfirmed.hide(2000);
+			}
+			else
+			{
+				predicatesFormatError.show();
+				predicatesFormatError.hide(2000);
+			}
+		}
+		else
+		{
+			subscriber.subscribePredicates({});
+			subscribedPredicates.val('');
+			conf.delete('predicates');
+			storedPredicates.text('');
+			predicatesConfirmed.show();
+			predicatesConfirmed.hide(2000);
+		}
+
 	});
 
 	registerSub.click((e) => {

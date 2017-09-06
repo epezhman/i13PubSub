@@ -6,6 +6,9 @@ module.exports.register = register;
 module.exports.testRegister = testRegister;
 module.exports.getMessages = getMessages;
 module.exports.getTopics = getTopics;
+module.exports.updateLastSeen = updateLastSeen;
+module.exports.subscribePredicates = subscribePredicates;
+
 
 const requestp = require('request-promise');
 const iot = require('./iot');
@@ -34,6 +37,20 @@ function unsubscribe(topics) {
 		url: config.UNSUBSCRIBE_URL,
 		form: {
 			topics: topics,
+			subscriber_id: conf.get('sub_id'),
+		}
+	}, (err, httpResponse, body) => {
+		if (err) {
+			console.error(err)
+		}
+	});
+}
+
+function subscribePredicates(predicates) {
+	request.post({
+		url: config.SUBSCRIBE_PREDICATES_URL,
+		form: {
+			predicates: predicates,
 			subscriber_id: conf.get('sub_id'),
 		}
 	}, (err, httpResponse, body) => {
@@ -79,6 +96,19 @@ function testRegister() {
 		}
 	}).catch((err) => {
 		return false
+	});
+}
+
+function updateLastSeen() {
+	let reg_options = {
+		uri: config.SUBSCRIBE_LAST_SEEN_URL,
+		qs: {
+			subscriber_id: conf.get('sub_id')
+		},
+		json: true
+	};
+	return requestp(reg_options).catch((err) => {
+		console.log(err);
 	});
 }
 

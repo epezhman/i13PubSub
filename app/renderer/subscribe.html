@@ -31,6 +31,7 @@
 					<hr>
 					<div id="subscriber-actions" style="display: none;">
 						<table>
+							<tbody>
 							<tr>
 								<td valign="top" class="td-topics">
 									<h4>Topic-Based Matching</h4>
@@ -84,8 +85,7 @@
 											<label>Subscribed Predicate</label>
 											<br>
 											<textarea class="form-control" rows="5" id="predicates"
-													  placeholder="Predicates"
-													  required></textarea>
+													  placeholder="Predicates"></textarea>
 											<p class="help-block">
 												Example: Stock=IBM,Price>100
 												<br>
@@ -103,6 +103,9 @@
 										<div class=form-control"">
 											<p class="help-block" id="predicates-confirmed" style="display: none">
 												Predicted Submitted!</p>
+											<p class="help-block" id="predicates-format-error" style="display: none">
+												The predicate has wrong format, please correct it with the help of example!</p>
+										</div>
 										</div>
 									</form>
 									<hr>
@@ -110,6 +113,7 @@
 									<p class="subs-topics" id="subbed-predicates">None</p>
 								</td>
 							</tr>
+							</tbody>
 						</table>
 						<hr>
 						<div class="checkbox" style="display: none;">
