@@ -209,10 +209,9 @@ $(document).ready(() => {
 		let predicates = subscribedPredicates.val().trim();
 		if (predicates.length) {
 			let jsonPredicate = utils.JSONifySubscriberPredicates(predicates);
-			console.log(jsonPredicate)
 			if (jsonPredicate) {
 				subscriber.subscribePredicates(jsonPredicate);
-				subscribedPredicates.val('');
+				//subscribedPredicates.val('');
 				conf.set('predicates', predicates);
 				storedPredicates.text(predicates);
 				predicatesConfirmed.show();

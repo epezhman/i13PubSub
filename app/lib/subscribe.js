@@ -50,8 +50,8 @@ function subscribePredicates(predicates) {
 	request.post({
 		url: config.SUBSCRIBE_PREDICATES_URL,
 		form: {
-			predicates: predicates,
-			subscriber_id: conf.get('sub_id'),
+			predicates: JSON.stringify(predicates),
+			subscriber_id: conf.get('sub_id')
 		}
 	}, (err, httpResponse, body) => {
 		if (err) {
