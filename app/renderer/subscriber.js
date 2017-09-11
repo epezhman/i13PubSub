@@ -5,7 +5,8 @@ const subscriber = remote.require('../lib/subscribe');
 const utils = remote.require('../lib/utils');
 const ConfigStore = require('configstore');
 const config = require('../config');
-const Client = require("ibmiotf");
+const Client = require('ibmiotf');
+const moment = require('moment');
 
 const conf = new ConfigStore(config.APP_SHORT_NAME);
 
@@ -77,8 +78,8 @@ function getMessagesPolling() {
 				result.forEach((res) => {
 					counterReal += 1;
 					realTimeMessageCounter.text(counterReal);
-					receivedMessagesRealTime.prepend('<b>Topic</b>: ' + res.topic + ', <b>Message</b>: '
-						+ res.message + ', <b>Time</b>: ' + res.time + '</br>');
+					receivedMessagesRealTime.prepend('<tr><td>' + res.topic + '</td><td>'
+						+ res.message + '</td><td>' + moment(res.timestamp).format("DD-MM-YYYY HH:mm:ss") + '</td></tr>');
 				});
 			}
 		});
@@ -103,11 +104,21 @@ function getMessagesRealTime() {
 				counterReal += 1;
 				realTimeMessageCounter.text(counterReal);
 				payload = JSON.parse(payload);
-				receivedMessagesRealTime.prepend('<b>Topic</b>: ' + payload['topic'] + ', <b>Message</b>: '
-					+ payload['message'] + ', <b>Time</b>: ' + payload['time'] + '</br>');
+				if (payload.hasOwnProperty('topic')) {
+					receivedMessagesRealTime.prepend('<tr><td>' + payload['topic'] + '</td><td>'
+						+ payload['message'] + '</td><td>' + moment(payload['time']).format("DD-MM-YYYY HH:mm:ss") + '</td></tr>');
+				}
+				else if (payload.hasOwnProperty('predicates')) {
+					let predicates = '';
+					for (let predicate in payload['predicates']) {
+						if (payload['predicates'].hasOwnProperty(predicate))
+							predicates += `${predicate}: ${payload['predicates'][predicate]}`
+					}
+					receivedMessagesRealTime.prepend('<tr><td>' + predicates + '</td><td>'
+						+ payload['message'] + '</td><td>' + moment(payload['time']).format("DD-MM-YYYY HH:mm:ss") + '</td></tr>');
+				}
 			}
 		});
-
 		deviceClient.on("error", function (err) {
 			console.error(err)
 		});
@@ -116,9 +127,9 @@ function getMessagesRealTime() {
 
 function initFunctions() {
 	conf.set('stateless', true);
-	// getTopics();
-	// getMessagesPolling();
-	// setTimeout(updateLastSeen, 5000);
+	getTopics();
+	getMessagesPolling();
+	setTimeout(updateLastSeen, 5000);
 	getMessagesRealTime();
 
 }
@@ -211,20 +222,18 @@ $(document).ready(() => {
 			let jsonPredicate = utils.JSONifySubscriberPredicates(predicates);
 			if (jsonPredicate) {
 				subscriber.subscribePredicates(jsonPredicate);
-				//subscribedPredicates.val('');
+				subscribedPredicates.val('');
 				conf.set('predicates', predicates);
 				storedPredicates.text(predicates);
 				predicatesConfirmed.show();
 				predicatesConfirmed.hide(2000);
 			}
-			else
-			{
+			else {
 				predicatesFormatError.show();
 				predicatesFormatError.hide(2000);
 			}
 		}
-		else
-		{
+		else {
 			subscriber.subscribePredicates({});
 			subscribedPredicates.val('');
 			conf.delete('predicates');

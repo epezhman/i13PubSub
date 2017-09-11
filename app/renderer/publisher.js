@@ -2,6 +2,7 @@
 
 const {remote} = require('electron');
 const publish = remote.require('../lib/publish');
+const utils = remote.require('../lib/utils');
 const ConfigStore = require('configstore');
 const config = require('../config');
 
@@ -67,12 +68,14 @@ $(document).ready(() => {
 		let selectedPubType = $('input[name=publish-type]:checked').val();
 		let topics = pubTopics.val().trim();
 		let predicates = predicatesArea.val().trim();
+		let jsonPredicate = utils.JSONifyPublisherPredicates(predicates);
+
 		let message = pubMessage.val().trim();
 		if (!topics && selectedPubType === 'topic') {
 			pubErrorTopicsMissing.show();
 			pubErrorTopicsMissing.hide(2000);
 		}
-		if (!predicates && selectedPubType === 'content') {
+		if (!jsonPredicate && selectedPubType === 'content') {
 			pubErrorPredicatesMissing.show();
 			pubErrorPredicatesMissing.hide(2000);
 		}
@@ -83,8 +86,8 @@ $(document).ready(() => {
 		if (topics && message && selectedPubType === 'topic') {
 			publishTopicBasedMessage(topics, message);
 		}
-		if (predicates && message && selectedPubType === 'content') {
-			publishContentBasedMessage(predicates, message);
+		if (jsonPredicate && message && selectedPubType === 'content') {
+			publishContentBasedMessage(jsonPredicate, message);
 		}
 	});
 
@@ -93,11 +96,13 @@ $(document).ready(() => {
 		let selectedPubType = $('input[name=publish-type]:checked').val();
 		let topics = pubTopics.val().trim();
 		let predicates = predicatesArea.val().trim();
+		let jsonPredicate = utils.JSONifyPublisherPredicates(predicates);
+
 		if (!topics && selectedPubType === 'topic') {
 			pubErrorTopicsMissing.show();
 			pubErrorTopicsMissing.hide(2000);
 		}
-		if (!predicates && selectedPubType === 'content') {
+		if (!jsonPredicate && selectedPubType === 'content') {
 			pubErrorPredicatesMissing.show();
 			pubErrorPredicatesMissing.hide(2000);
 		}
@@ -106,10 +111,10 @@ $(document).ready(() => {
 			pubSpanCounter.text(counter);
 			publishTopicBasedMessage(topics, counter.toString());
 		}
-		if (predicates && selectedPubType === 'content') {
+		if (jsonPredicate && selectedPubType === 'content') {
 			counter += 1;
 			pubSpanCounter.text(counter);
-			publishContentBasedMessage(predicates, counter.toString());
+			publishContentBasedMessage(jsonPredicate, counter.toString());
 		}
 	});
 

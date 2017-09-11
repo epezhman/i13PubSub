@@ -61,6 +61,24 @@ function JSONifySubscriberPredicates(predicates) {
 
 }
 
-function JSONifyPublisherPredicates() {
+/**
+ * @return {{}}
+ */
+function JSONifyPublisherPredicates(predicates) {
+	let resultPredicates = {};
+	predicates = predicates.replace(/ /g, '');
+	let predicatesTokens = predicates.split(',');
 
+	for (let i = 0; i < predicatesTokens.length; i++) {
+		let validPred = false;
+		let onePredicate = predicatesTokens[i].split(':');
+		if (onePredicate.length === 2) {
+			resultPredicates[onePredicate[0]] = onePredicate[1]
+			validPred = true;
+		}
+
+		if (!validPred)
+			return false;
+	}
+	return resultPredicates;
 }

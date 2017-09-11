@@ -10,3 +10,11 @@
 .td-predicates {
 	width: 50% !important;
 }
+
+.error {
+	color: red;
+}
+
+.success {
+	color: cadetblue;
+}

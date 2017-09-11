@@ -76,6 +76,6 @@ app.on('activate', () => {
 });
 
 app.on('ready', () => {
-	//publishWindow = createPublishWindow();
+	publishWindow = createPublishWindow();
 	subscribeWindow = createSubscribeWindow();
 });

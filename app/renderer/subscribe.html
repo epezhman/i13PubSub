@@ -17,7 +17,7 @@
 		<div class="pane-group">
 			<div class="pane">
 				<div class="subscriber-container">
-					<h3>Subscribe to Topics and Watch for Messages</h3>
+					<h3>Subscribe and Watch for Messages</h3>
 					<button type="button" class="btn btn-form btn-primary" id="register-sub" style="display: none">
 						Register Subscriber
 					</button>
@@ -25,9 +25,10 @@
 						Detach this Subscriber ID
 					</button>
 					<div style="">
-						<div>Subscriber ID: <input class="form-control" id="subscriber-id"</div>
+						<div>Subscriber ID: <input class="form-control" id="subscriber-id"></div>
 					</div>
-					<p class="help-block" id="register-error" style="display: none">Could not register, Try again</p>
+					<p class="help-block error" id="register-error" style="display: none">Could not register, Try
+						again</p>
 					<hr>
 					<div id="subscriber-actions" style="display: none;">
 						<table>
@@ -50,7 +51,8 @@
 											</button>
 										</div>
 										<div class=form-control"">
-											<p class="help-block" id="subbed-confirmed" style="display: none">Topics
+											<p class="help-block success" id="subbed-confirmed" style="display: none">
+												Topics
 												Subscribed!</p>
 										</div>
 									</form>
@@ -70,7 +72,8 @@
 											</button>
 										</div>
 										<div class=form-control"">
-											<p class="help-block" id="unsubed-confirmed" style="display: none">Topics
+											<p class="help-block success" id="unsubed-confirmed" style="display: none">
+												Topics
 												Unsubscribed!</p>
 										</div>
 									</form>
@@ -100,12 +103,14 @@
 											<p class="help-block">New predicates will overwrite the previous ones.
 												<br> Empty submissions will remove all the predicates</p>
 										</div>
-										<div class=form-control"">
-											<p class="help-block" id="predicates-confirmed" style="display: none">
+										<div class="form-control">
+											<p class="help-block success" id="predicates-confirmed"
+											   style="display: none">
 												Predicted Submitted!</p>
-											<p class="help-block" id="predicates-format-error" style="display: none">
-												The predicate has wrong format, please correct it with the help of example!</p>
-										</div>
+											<p class="help-block error" id="predicates-format-error"
+											   style="display: none">
+												The predicate has wrong format, please correct it with the help of
+												example!</p>
 										</div>
 									</form>
 									<hr>
@@ -121,13 +126,25 @@
 								<input type="checkbox" checked="checked" id="enable-polling"> Enable Polling
 							</label>
 						</div>
-						<h4>Publications</h4>
-						<p class="sub-messages" id="received-messages-real-time"></p>
+						<h4>Publications (number of messages: <span id="real-time-message-counter">0</span>)</h4>
+						<table class="table-striped">
+							<thead>
+							<tr>
+								<th>Topic/Predicates</th>
+								<th>Message</th>
+								<th>Time</th>
+							</tr>
+							</thead>
+							<tbody id="received-messages-real-time">
+
+							</tbody>
+						</table>
+						<p class="sub-messages" id="" style="display: none"></p>
 						<table style="display: none">
 							<thead>
 							<tr>
 								<th>Polling (number of messages: <span id="polling-message-counter">0</span>)</th>
-								<th>Real-time (number of messages: <span id="real-time-message-counter">0</span>)</th>
+								<th>Real-time </th>
 							</tr>
 							</thead>
 							<tbody>

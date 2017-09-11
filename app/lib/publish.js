@@ -2,8 +2,6 @@
 
 const request = require('request');
 const config = require('../config');
-const requestPromise = require('request-promise');
-
 
 module.exports.publishTopicsBased = publishTopicsBased;
 module.exports.publishContentsBased = publishContentsBased;
