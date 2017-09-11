@@ -34,7 +34,6 @@ function publishContentBasedMessage(predicates, message) {
 }
 
 $(document).ready(() => {
-
 	pubTopics = $('#pub-topics');
 	pubMessage = $('#pub-message');
 	pubSubmit = $('#pub-submit');

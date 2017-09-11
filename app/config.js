@@ -36,6 +36,16 @@ module.exports = {
 	WATSON_IOT_API_USERNAME: secrets.WATSON_IOT_API_USERNAME,
 	WATSON_IOT_API_PASSWORD: secrets.WATSON_IOT_API_PASSWORD,
 	WATSON_IOT_ORG: secrets.WATSON_IOT_ORG,
-	WATSON_IOT_DEVICE_TYPE: secrets.WATSON_IOT_DEVICE_TYPE
+	WATSON_IOT_DEVICE_TYPE: secrets.WATSON_IOT_DEVICE_TYPE,
+
+	SUBSCRIBERS: secrets.SUBSCRIBERS,
+	TOPICS_1: ['topic_1_1'],
+	TOPICS_2: ['topic_2_1', 'topic_2_2'],
+	TOPICS_3: ['topic_3_1', 'topic_3_2', 'topic_3_3'],
+	TOPICS_4: ['topic_4_1', 'topic_4_2', 'topic_4_3', 'topic_4_4'],
+	TOPICS_5: ['topic_5_1', 'topic_5_2', 'topic_5_3', 'topic_5_4', 'topic_5_5'],
+	PREDICATES: 'type=news,popularity>=200',
+	MAX_NUMBER_SUBSCRIBER: 1000,
+	MAX_NUMBER_MESSAGES: 100
 
 };
