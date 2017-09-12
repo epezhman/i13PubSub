@@ -10,6 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "async": "^2.5.0",
     "configstore": "^3.1.1",
     "ibmiotf": "^0.2.38",
     "jquery": "^3.2.1",

@@ -25,6 +25,8 @@ module.exports = {
 	PUBLISH_CONTENT_BASED_URL: secrets.PUBLISH_CONTENT_BASED_URL,
 	SUBSCRIBE_URL: secrets.SUBSCRIBE_URL,
 	SUBSCRIBE_PREDICATES_URL: secrets.SUBSCRIBE_PREDICATES_URL,
+	BULK_SUBSCRIBE_PREDICATES_URL: secrets.BULK_SUBSCRIBE_PREDICATES_URL,
+	BULK_SUBSCRIBE_URL: secrets.BULK_SUBSCRIBE_URL,
 	SUBSCRIBE_LAST_SEEN_URL: secrets.SUBSCRIBE_LAST_SEEN_URL,
 	UNSUBSCRIBE_URL: secrets.UNSUBSCRIBE_URL,
 	GET_TOPICS_URL: secrets.GET_TOPICS_URL,
@@ -39,13 +41,21 @@ module.exports = {
 	WATSON_IOT_DEVICE_TYPE: secrets.WATSON_IOT_DEVICE_TYPE,
 
 	SUBSCRIBERS: secrets.SUBSCRIBERS,
-	TOPICS_1: ['topic_1_1'],
-	TOPICS_2: ['topic_2_1', 'topic_2_2'],
-	TOPICS_3: ['topic_3_1', 'topic_3_2', 'topic_3_3'],
-	TOPICS_4: ['topic_4_1', 'topic_4_2', 'topic_4_3', 'topic_4_4'],
-	TOPICS_5: ['topic_5_1', 'topic_5_2', 'topic_5_3', 'topic_5_4', 'topic_5_5'],
-	PREDICATES: 'type=news,popularity>=200',
 	MAX_NUMBER_SUBSCRIBER: 1000,
-	MAX_NUMBER_MESSAGES: 100
-
+	MAX_NUMBER_MESSAGES: 100,
+	TOPICS: ['evaluation_1', 'evaluation_2', 'evaluation_3', 'evaluation_4', 'evaluation_5'],
+	SUB_PREDICATES: {
+		type_1: {
+			value: 'news',
+			operator: '='
+		},
+		popularity_1: {
+			value: '200',
+			operator: '>='
+		},
+	},
+	PUB_PREDICATE: {
+		type_1: 'news',
+		popularity_1: 300
+	}
 };

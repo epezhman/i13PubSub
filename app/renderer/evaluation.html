@@ -10,89 +10,105 @@
 </head>
 <body>
 <div class="window">
-	<header class="toolbar toolbar-header">
-		<h1 class="title">i13 Publisher</h1>
-	</header>
 	<div class="window-content">
 		<div class="pane-group">
 			<div class="pane">
-				<div class="publisher-container">
-					<h3>Publish Messages</h3>
+				<div class="content-container">
+					<h3>Broker Evaluation</h3>
 					<hr>
 					<table>
 						<tr>
-							<td valign="top" class="td-topics">
-								<div class="radio">
-									<label style="font-weight: bold">
-										<input type="radio" name="publish-type" value="topic" checked>
-										Topic-Based Matching
-									</label>
+							<td valign="top" class="td-eval-settings">
+								<h5>Evaluation Setting</h5>
+								<div class="form-group">
+									<label>Number of Subscribers</label>
+									<br>
+									<input class="form-control watch-change" type="number" id="sub-count" value="50">
+									<p class="help-block">Maximum 1000 subscriber devices</p>
 								</div>
 								<div class="form-group">
-									<label>Topics</label>
+									<label>Number of Publications</label>
 									<br>
-									<input class="form-control" placeholder="Topics" id="pub-topics">
-									<p class="help-block">The topics can be separated by comma</p>
+									<input class="form-control" type="number" id="message-count"
+										   value="10">
+									<p class="help-block">Maximum 100 publications</p>
 								</div>
-								<div class="checkbox">
+								<div class="form-group">
+									<label>Delay between Publications (ms)</label>
+									<br>
+									<input class="form-control" type="number" id="delay-ms" value="50">
+								</div>
+								<div class="form-group">
+									<label>Number of Assigned Topics (only valid for topic-based matching)</label>
+									<br>
+									<input class="form-control watch-change" type="number" id="assigned-topics"
+										   value="1">
+									<p class="help-block">Maximum 5 topics</p>
+								</div>
+								<div class="radio">
 									<label>
-										<input type="checkbox" id="publish-stateless" checked="checked"> Publish
-										Semi-stateless
+										<input type="radio" name="evaluation-type" class="watch-change"
+											   value="topic-stateful" checked>
+										Stateful Topic-based matching
 									</label>
 								</div>
-								<div class="checkbox">
+								<div class="radio">
 									<label>
-										<input type="checkbox" id="support-polling" checked="checked"> Support Time Decoupling
-										with Semi-stateless Publish
+										<input type="radio" name="evaluation-type" class="watch-change"
+											   value="topic-semi-stateful">
+										Semi-stateful Topic-based matching
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="evaluation-type" class=" watch-change"
+											   value="content">
+										Semi-Stateful Content-based matching
 									</label>
 								</div>
 							</td>
-							<td valign="top" class="td-predicates">
-								<div class="radio">
-									<label style="font-weight: bold">
-										<input type="radio" name="publish-type" value="content">
-										Content-Based Matching
-									</label>
+							<td valign="top" class="td-eval-result">
+								<h5>Evaluation Result</h5>
+								<div class="form-group">
+									<label>Number of Online Subscribers</label>
+									<br>
+									<input class="form-control" id="online-subscribers" value="0">
 								</div>
 								<div class="form-group">
-									<label>Predicates</label>
+									<label>Number of Sent Publications</label>
 									<br>
-									<textarea class="form-control" rows="5" id="predicates"
-											  placeholder="Predicates"></textarea>
-									<p class="help-block">
-										Example: Stock:IBM,Price:100
-										<br>
-										Note: Time decoupling is not available for content-based matching
-									</p>
+									<input class="form-control" id="sent-publication" value="0">
+								</div>
+								<div class="form-group">
+									<label>Average Publications Time (ms)</label>
+									<br>
+									<input class="form-control" id="publications-time" value="0">
+								</div>
+								<div class="form-group">
+									<label>Average Suibscriptions Time (ms)</label>
+									<br>
+									<input class="form-control" id="subscriptions-time" value="0">
+								</div>
+								<div class="form-group">
+									<label>Evaluation Status</label>
+									<br>
+									<span class="form-control" id="evaluation-status">Not Running</span>
+									<p class="help-block">Failure means Cloudant or OpenWhisk hit the limits and
+										<br> number of publications should decrease or delay should increase</p>
 								</div>
 							</td>
 						</tr>
 					</table>
 					<hr>
-					<form id="pub-form">
-						<div class="form-group">
-							<label>Message</label>
-							<textarea class="form-control" rows="3" id="pub-message" placeholder="Message"></textarea>
-						</div>
-						<div class="form-group">
-							<label>Counter</label>
-							<span class="form-control" id="counter-span">0</span>
-						</div>
-						<div class="form-actions">
-							<button type="reset" class="btn btn-form btn-default">Cancel</button>
-							<button type="button" class="btn btn-form btn-primary" id="pub-submit">Publish Message
-							</button>
-							<button type="button" class="btn btn-form btn-primary" id="pub-submit-counter">Publish
-								Counter
-							</button>
-						</div>
-						<div class=form-control"">
-							<p class="help-block success" id="pub-published" style="display: none">Message Published!</p>
-							<p class="help-block error" id="pub-error-topics" style="display: none">Topics Missing!</p>
-							<p class="help-block error" id="pub-error-predicates" style="display: none">Predicates Missing or Wrong Format!</p>
-							<p class="help-block error" id="pub-error-message" style="display: none">Message Missing!</p>
-						</div>
-					</form>
+					<div class="form-actions">
+						<button type="reset" class="btn btn-form btn-default" id="init-eval">Initialize</button>
+						<button type="button" class="btn btn-form btn-primary" id="run-eval" style="display: none">
+							Execute Evaluation
+						</button>
+					</div>
+					<p class="help-block success" id="eval-ready" style="display: none">Ready for Evaluations!</p>
+					<p class="help-block success" id="setting-missing" style="display: none">Some Parameters are
+						Missing!</p>
 				</div>
 			</div>
 		</div>
@@ -105,6 +121,6 @@
 	}
 </script>
 <script src="../node_modules/jquery/dist/jquery.js"></script>
-<script src="publisher.js"></script>
+<script src="evaluation.js"></script>
 </body>
 </html>

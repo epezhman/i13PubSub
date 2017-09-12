@@ -12,7 +12,7 @@
   },
   "scripts": {
     "test": "xo",
-    "start": "electron .",
+    "start": "electron app/main/index.js",
     "build": "electron-packager . --out=dist --asar --overwrite --all"
   },
   "dependencies": {

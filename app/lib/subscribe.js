@@ -87,7 +87,6 @@ function testRegister() {
 	};
 	return requestp(reg_options).then((result) => {
 		if (result.hasOwnProperty('ok')) {
-			console.log(`'${result['sub_id']}',`);
 			iot.register(result['sub_id']);
 			return true
 		}

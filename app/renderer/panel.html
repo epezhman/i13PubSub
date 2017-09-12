@@ -10,89 +10,22 @@
 </head>
 <body>
 <div class="window">
-	<header class="toolbar toolbar-header">
-		<h1 class="title">i13 Publisher</h1>
-	</header>
 	<div class="window-content">
 		<div class="pane-group">
 			<div class="pane">
-				<div class="publisher-container">
-					<h3>Publish Messages</h3>
+				<div class="content-container">
+					<h4>i13 Broker</h4>
 					<hr>
-					<table>
-						<tr>
-							<td valign="top" class="td-topics">
-								<div class="radio">
-									<label style="font-weight: bold">
-										<input type="radio" name="publish-type" value="topic" checked>
-										Topic-Based Matching
-									</label>
-								</div>
-								<div class="form-group">
-									<label>Topics</label>
-									<br>
-									<input class="form-control" placeholder="Topics" id="pub-topics">
-									<p class="help-block">The topics can be separated by comma</p>
-								</div>
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" id="publish-stateless" checked="checked"> Publish
-										Semi-stateless
-									</label>
-								</div>
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" id="support-polling" checked="checked"> Support Time Decoupling
-										with Semi-stateless Publish
-									</label>
-								</div>
-							</td>
-							<td valign="top" class="td-predicates">
-								<div class="radio">
-									<label style="font-weight: bold">
-										<input type="radio" name="publish-type" value="content">
-										Content-Based Matching
-									</label>
-								</div>
-								<div class="form-group">
-									<label>Predicates</label>
-									<br>
-									<textarea class="form-control" rows="5" id="predicates"
-											  placeholder="Predicates"></textarea>
-									<p class="help-block">
-										Example: Stock:IBM,Price:100
-										<br>
-										Note: Time decoupling is not available for content-based matching
-									</p>
-								</div>
-							</td>
-						</tr>
-					</table>
-					<hr>
-					<form id="pub-form">
-						<div class="form-group">
-							<label>Message</label>
-							<textarea class="form-control" rows="3" id="pub-message" placeholder="Message"></textarea>
-						</div>
-						<div class="form-group">
-							<label>Counter</label>
-							<span class="form-control" id="counter-span">0</span>
-						</div>
-						<div class="form-actions">
-							<button type="reset" class="btn btn-form btn-default">Cancel</button>
-							<button type="button" class="btn btn-form btn-primary" id="pub-submit">Publish Message
-							</button>
-							<button type="button" class="btn btn-form btn-primary" id="pub-submit-counter">Publish
-								Counter
-							</button>
-						</div>
-						<div class=form-control"">
-							<p class="help-block success" id="pub-published" style="display: none">Message Published!</p>
-							<p class="help-block error" id="pub-error-topics" style="display: none">Topics Missing!</p>
-							<p class="help-block error" id="pub-error-predicates" style="display: none">Predicates Missing or Wrong Format!</p>
-							<p class="help-block error" id="pub-error-message" style="display: none">Message Missing!</p>
-						</div>
-					</form>
+					<h5>Please select the windows to open</h5>
+					<button class="btn btn-primary" id="open-publisher">
+						<span class="icon icon-up"></span> Open Publisher
+					</button>
+					<button class="btn btn-primary" id="open-subscriber">
+						<span class="icon icon-down"></span> Open Subscriber
+					</button>
+					<button class="btn btn-primary" id="open-evaluation">
+						<span class="icon icon-check"></span> Open Evaluation
+					</button>
 				</div>
 			</div>
 		</div>
@@ -105,6 +38,6 @@
 	}
 </script>
 <script src="../node_modules/jquery/dist/jquery.js"></script>
-<script src="publisher.js"></script>
+<script src="panel.js"></script>
 </body>
 </html>

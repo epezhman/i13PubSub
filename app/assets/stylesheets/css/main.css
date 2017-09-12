@@ -1,4 +1,4 @@
-.publisher-container, .subscriber-container {
+.content-container {
 	padding: 10px;
 }
 
@@ -12,9 +12,25 @@
 }
 
 .error {
-	color: red;
+	color: red !important;
+	font-size: 14px !important;
 }
 
 .success {
-	color: cadetblue;
+	color: cadetblue !important;
+	font-size: 14px !important;
+}
+
+.help-block {
+	color: gray;
+	font-size: 10px;
+}
+
+.td-eval-settings {
+	border-right: 1px solid #ddd;
+	width: 400px !important;
+}
+
+.td-eval-result {
+	width: 400px !important;
 }
