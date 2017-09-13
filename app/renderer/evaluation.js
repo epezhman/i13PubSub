@@ -98,17 +98,18 @@ function publishMessages(publicationsCount, delayMS) {
 }
 
 function publishTopicsBasedStateful(topics, message, cb, delayMs) {
-	request.post({
-		url: config.PUBLISH_URL,
-		form: {
+	ows.actions.invoke({
+		name: "pubsub/publish",
+		blocking: true,
+		result: true,
+		params: {
 			topics: topics,
 			message: message
 		}
-	}, (err, httpResponse, body) => {
-		if (err) {
-			console.error(err)
-		}
+	}).then(result => {
 		setTimeout(cb, delayMs);
+	}).catch(err => {
+		console.error(err)
 	});
 }
 
