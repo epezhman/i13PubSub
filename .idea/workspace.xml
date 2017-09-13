@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b58fa98-2563-4417-8fff-18812f18c18c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/renderer/evaluation.html" afterPath="$PROJECT_DIR$/app/renderer/evaluation.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/renderer/evaluation.js" afterPath="$PROJECT_DIR$/app/renderer/evaluation.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -20,17 +21,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="evaluation.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/renderer/evaluation.html">
+      <file leaf-file-name="evaluation.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/renderer/evaluation.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="65" column="46" lean-forward="false" selection-start-line="65" selection-start-column="46" selection-end-line="65" selection-end-column="46" />
-              <folding>
-                <element signature="n#style#0;n#span#0;n#div#5;n#td#1;n#tr#0;n#table#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="440">
+              <caret line="176" column="70" lean-forward="false" selection-start-line="176" selection-start-column="70" selection-end-line="176" selection-end-column="70" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -46,8 +42,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>radio</find>
-      <find>td</find>
       <find>tr</find>
       <find>active</find>
       <find>initFunctions</find>
@@ -76,6 +70,8 @@
       <find>finishedSuccessfully</find>
       <find>perfo</find>
       <find>cloud not get the sub</find>
+      <find>prepareSubscribers</find>
+      <find>totalMessagesInExperiment</find>
     </findStrings>
     <replaceStrings>
       <replace>counterPoll</replace>
@@ -141,8 +137,8 @@
         <option value="$PROJECT_DIR$/app/secrets.config.js.txt" />
         <option value="$PROJECT_DIR$/app/secrets.config.js" />
         <option value="$PROJECT_DIR$/app/main/index.js" />
-        <option value="$PROJECT_DIR$/app/renderer/evaluation.js" />
         <option value="$PROJECT_DIR$/app/renderer/evaluation.html" />
+        <option value="$PROJECT_DIR$/app/renderer/evaluation.js" />
       </list>
     </option>
   </component>
@@ -196,12 +192,6 @@
               <item name="i13PubSub" type="b2602c69:ProjectViewProjectNode" />
               <item name="i13PubSub" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="i13PubSub" type="b2602c69:ProjectViewProjectNode" />
-              <item name="i13PubSub" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="i13PubSub" type="b2602c69:ProjectViewProjectNode" />
@@ -329,12 +319,12 @@
       <workItem from="1504793196776" duration="48000" />
       <workItem from="1504884653656" duration="2263000" />
       <workItem from="1505119347792" duration="8065000" />
-      <workItem from="1505146583630" duration="31270000" />
+      <workItem from="1505146583630" duration="32703000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="167991000" />
+    <option name="totallyTimeSpent" value="169424000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -789,14 +779,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/evaluation.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-17">
-          <caret line="112" column="71" lean-forward="false" selection-start-line="112" selection-start-column="71" selection-end-line="112" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/secrets.config.js.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -807,14 +789,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/renderer/evaluation.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="65" column="46" lean-forward="false" selection-start-line="65" selection-start-column="46" selection-end-line="65" selection-end-column="46" />
+        <state relative-caret-position="675">
+          <caret line="83" column="40" lean-forward="true" selection-start-line="83" selection-start-column="40" selection-end-line="83" selection-end-column="40" />
           <folding>
             <element signature="n#style#0;n#span#0;n#div#5;n#td#1;n#tr#0;n#table#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/evaluation.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="176" column="70" lean-forward="false" selection-start-line="176" selection-start-column="70" selection-end-line="176" selection-end-column="70" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -41,6 +41,8 @@ let subCounter = 0;
 let doneCounter = 0;
 let sumTime = 0;
 let totalGotMessageCounter = 0;
+let totalMessagesInExperiment = 0;
+
 
 function checkSuccess() {
 	if (checkSuccessTimeout) {
@@ -145,7 +147,6 @@ function publishContentsBased(predicates, message, cb, delayMs) {
 
 function prepareSubscribers(subscribers, topicsCount, publicationsCount) {
 	const subscribersList = config.SUBSCRIBERS.slice(0, subscribers);
-	const totalMessagesInExperiment = publicationsCount * topicsCount;
 	eachLimit(subscribersList, 1, function (sub_id, cb) {
 		subCounter += 1;
 		devices[sub_id] = getSub(sub_id);
@@ -173,7 +174,7 @@ function prepareSubscribers(subscribers, topicsCount, publicationsCount) {
 					sumTime += (experimentLogs[sub_id]['subEndTimestamp'] - experimentLogs[sub_id]['subStartTimestamp']);
 					doneCounter += 1;
 					if (doneCounter === subCounter) {
-						subTime.val(sumTime / doneCounter);
+						subTime.val(Math.round(sumTime / doneCounter));
 						finishedSuccessfully = true;
 						checkSuccess();
 					}
@@ -323,6 +324,7 @@ $(document).ready(() => {
 		if (subscribers && topics && publications && pubType) {
 			initSubmit.hide();
 			evalStatus.text('Initializing.....');
+			totalMessagesInExperiment = publications * topics;
 			initEval(subscribers, topics, pubType, publications)
 		}
 		else {
@@ -335,6 +337,8 @@ $(document).ready(() => {
 		e.preventDefault();
 		let publications = parseInt(pubCount.val());
 		let delays = parseInt(delayMs.val());
+		let topics = parseInt(topicsCount.val());
+
 		if (publications && publications > 100) {
 			publications = 100;
 			pubCount.val(100);
@@ -347,6 +351,7 @@ $(document).ready(() => {
 			delayMs.val(0);
 		}
 		if (publications && delays >= 0) {
+			totalMessagesInExperiment = publications * topics;
 			publishMessages(publications, delays)
 		}
 		else {
