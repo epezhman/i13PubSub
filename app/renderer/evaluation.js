@@ -1,15 +1,18 @@
 'use strict';
 
-const {remote} = require('electron');
-const publish = remote.require('../lib/publish');
-const utils = remote.require('../lib/utils');
-const ConfigStore = require('configstore');
-const config = require('../config');
 const request = require('request');
 const Client = require("ibmiotf");
 const eachLimit = require('async/eachLimit');
+const eachSeries = require('async/eachSeries');
+const config = require('../config');
+const openwhisk = require('openwhisk');
 
-const conf = new ConfigStore(config.APP_SHORT_NAME);
+const openWhiskOptions = {
+	apihost: config.OPENWHISK_API_HOST,
+	api_key: config.OPENWHISK_API_KEY
+};
+
+let ows = openwhisk(openWhiskOptions);
 
 let subCount;
 let pubCount;
@@ -26,42 +29,153 @@ let readyMessage;
 let missingParams;
 let typeRadios;
 let watchChange;
+let gotMessages;
 
 let readyToEval = false;
+let finishedSuccessfully = false;
+let checkSuccessTimeout = null;
+
 let devices = {};
 let experimentLogs = {};
 let subCounter = 0;
 let doneCounter = 0;
 let sumTime = 0;
+let totalGotMessageCounter = 0;
 
+function checkSuccess() {
+	if (checkSuccessTimeout) {
+		clearTimeout(checkSuccessTimeout);
+	}
+	if (finishedSuccessfully) {
+		evalStatus.text('Evaluation Finished Successfully');
+	}
+	else {
+		evalStatus.text('Evaluation Failed');
+	}
+	evalSubmit.show();
+}
 
-function prepareSubscribers() {
-	const subscribersList = config.SUBSCRIBERS.slice(0, subCount);
-	const totalMessagesInExperiment = pubCount * topicsCount;
+function publishMessages(publicationsCount, delayMS) {
+	resetValues();
+	finishedSuccessfully = false;
+	evalStatus.text('Performing Evaluation....');
+	evalSubmit.hide();
+	if (checkSuccessTimeout) {
+		clearTimeout(checkSuccessTimeout);
+	}
+	let type = $('input[name=evaluation-type]:checked').val();
+	let topicCount = topicsCount.val();
+	let startTime = Date.now();
+	let publications = Array.apply(null, {length: publicationsCount}).map(Number.call, Number);
+	let meta = null;
+	if (type === 'content') {
+		meta = JSON.stringify(config.PUB_PREDICATE);
+	}
+	else {
+		meta = config.TOPICS.slice(0, topicCount).toString();
+	}
+	eachSeries(publications, (counter, cb) => {
+		if (type === 'topic-stateful') {
+			publishTopicsBasedStateful(meta, 'Message ' + counter, cb, delayMS);
+		}
+		else if (type === 'topic-semi-stateful') {
+			publishTopicsBasedSemiStateful(meta, 'Message ' + counter, cb, delayMS);
+		}
+		else if (type === 'content') {
+			publishContentsBased(meta, 'Message ' + counter, cb, delayMS);
+		}
+		sentPub.val(counter + 1);
+
+	}, (err) => {
+		if (err) {
+			console.log(err)
+		}
+		pubTime.val(Date.now() - startTime);
+		checkSuccessTimeout = setTimeout(checkSuccess, 15000);
+	});
+}
+
+function publishTopicsBasedStateful(topics, message, cb, delayMs) {
+	request.post({
+		url: config.PUBLISH_URL,
+		form: {
+			topics: topics,
+			message: message
+		}
+	}, (err, httpResponse, body) => {
+		if (err) {
+			console.error(err)
+		}
+		setTimeout(cb, delayMs);
+	});
+}
+
+function publishTopicsBasedSemiStateful(topics, message, cb, delayMs) {
+	ows.actions.invoke({
+		name: "pubsub/publish_stateless",
+		blocking: true,
+		result: true,
+		params: {
+			topics: topics,
+			message: message,
+			polling_supported: false
+		}
+	}).then(result => {
+		setTimeout(cb, delayMs);
+	}).catch(err => {
+		console.error(err)
+	});
+}
+
+function publishContentsBased(predicates, message, cb, delayMs) {
+	ows.actions.invoke({
+		name: "pubsub/publish_content_based_stateless",
+		blocking: true,
+		result: true,
+		params: {
+			predicates: predicates,
+			message: message
+		}
+	}).then(result => {
+		setTimeout(cb, delayMs);
+	}).catch(err => {
+		console.error(err)
+	});
+}
+
+function prepareSubscribers(subscribers, topicsCount, publicationsCount) {
+	const subscribersList = config.SUBSCRIBERS.slice(0, subscribers);
+	const totalMessagesInExperiment = publicationsCount * topicsCount;
 	eachLimit(subscribersList, 1, function (sub_id, cb) {
 		subCounter += 1;
 		devices[sub_id] = getSub(sub_id);
 		experimentLogs[sub_id] = {};
 		experimentLogs[sub_id]['subCounter'] = 0;
-		console.log(subCounter + '. Connecting: ' + sub_id);
+		onlineCount.val(subCounter);
 		devices[sub_id].connect();
-		if (subCount === subCounter) {
-			console.log('Ready for evaluations')
+		if (subscribers === subCounter) {
+			readyMessage.show();
+			readyMessage.hide(2000);
+			evalStatus.text('Ready for Evaluations');
+			initSubmit.hide();
+			evalSubmit.show();
 		}
 		devices[sub_id].on("command", function (commandName, format, payload, topic) {
 			if (commandName === 'published_message') {
 				experimentLogs[sub_id]['subCounter'] += 1;
+				totalGotMessageCounter += 1;
+				gotMessages.val(totalGotMessageCounter);
 				if (experimentLogs[sub_id]['subCounter'] === 1) {
 					experimentLogs[sub_id]['subStartTimestamp'] = Date.now();
 				}
 				else if (experimentLogs[sub_id]['subCounter'] === totalMessagesInExperiment) {
 					experimentLogs[sub_id]['subEndTimestamp'] = Date.now();
-					let evalTime = experimentLogs[sub_id]['subEndTimestamp'] - experimentLogs[sub_id]['subStartTimestamp'];
-					sumTime += evalTime;
-					console.log(`Eval done: ${evalTime} ms`);
+					sumTime += (experimentLogs[sub_id]['subEndTimestamp'] - experimentLogs[sub_id]['subStartTimestamp']);
 					doneCounter += 1;
 					if (doneCounter === subCounter) {
-						console.log(`Eval over with average ${sumTime / doneCounter} ms`);
+						subTime.val(sumTime / doneCounter);
+						finishedSuccessfully = true;
+						checkSuccess();
 					}
 				}
 			}
@@ -87,10 +201,14 @@ function getSub(sub_id) {
 	return new Client.IotfDevice(deviceConfig);
 }
 
-
 function resetValues() {
 	sumTime = 0;
+	sentPub.val(0);
+	pubTime.val(0);
+	subTime.val(0);
 	doneCounter = 0;
+	totalGotMessageCounter = 0;
+	gotMessages.val(0);
 	for (let sub in experimentLogs) {
 		if (experimentLogs.hasOwnProperty(sub)) {
 			experimentLogs[sub]['subCounter'] = 0;
@@ -98,30 +216,55 @@ function resetValues() {
 	}
 }
 
-function initEval(subscribers, topics, pubType) {
+function resetPrepareDevices(subscribers, topics, publications) {
+	sumTime = 0;
+	sentPub.val(0);
+	pubTime.val(0);
+	subTime.val(0);
+	onlineCount.val(0);
+	doneCounter = 0;
+	onlineCount.val(0);
+	subCounter = 0;
+	totalGotMessageCounter = 0;
+	gotMessages.val(0);
+	for (let sub in devices) {
+		if (devices.hasOwnProperty(sub)) {
+			devices[sub].disconnect();
+		}
+	}
+	devices = {};
+	experimentLogs = {};
+	prepareSubscribers(subscribers, topics, publications);
+}
+
+function initEval(subscribers, topics, pubType, publications) {
 	if (pubType === 'topic-stateful' || pubType === 'topic-semi-stateful') {
-		request.post({
-			url: config.BULK_SUBSCRIBE_URL,
-			form: {
-				topics: config.TOPICS.slice(0, topics),
+		ows.actions.invoke({
+			name: "pubsub/bulk_subscribe",
+			blocking: true,
+			result: true,
+			params: {
+				topics: config.TOPICS.slice(0, topics).toString(),
 				subscribes: config.SUBSCRIBERS.slice(0, subscribers).toString()
 			}
-		}, (err, httpResponse, body) => {
-			if (err) {
-				console.error(err)
-			}
+		}).then(result => {
+			resetPrepareDevices(subscribers, topics, publications);
+		}).catch(err => {
+			console.error(err)
 		});
 	} else if (pubType === 'content') {
-		request.post({
-			url: config.BULK_SUBSCRIBE_PREDICATES_URL,
-			form: {
-				predicates: JSON.stringify(config.SUBSCRIBERS),
+		ows.actions.invoke({
+			name: "pubsub/bulk_subscribe_predicates",
+			blocking: true,
+			result: true,
+			params: {
+				predicates: JSON.stringify(config.SUB_PREDICATES),
 				subscribes: config.SUBSCRIBERS.slice(0, subscribers).toString()
 			}
-		}, (err, httpResponse, body) => {
-			if (err) {
-				console.error(err)
-			}
+		}).then(result => {
+			resetPrepareDevices(subscribers, topics, publications);
+		}).catch(err => {
+			console.error(err)
 		});
 	}
 }
@@ -142,6 +285,7 @@ $(document).ready(() => {
 	missingParams = $('#setting-missing');
 	typeRadios = $('input[name=evaluation-type]');
 	watchChange = $('.watch-change');
+	gotMessages = $('#got-publication');
 
 	watchChange.change(() => {
 		readyToEval = false;
@@ -151,11 +295,10 @@ $(document).ready(() => {
 
 	initSubmit.click((e) => {
 		e.preventDefault();
-		let subscribers = subCount.val();
-
-		let topics = topicsCount.val();
+		let subscribers = parseInt(subCount.val());
+		let publications = parseInt(pubCount.val());
+		let topics = parseInt(topicsCount.val());
 		let pubType = $('input[name=evaluation-type]:checked').val();
-
 		if (subscribers && subscribers > 1000) {
 			subscribers = 1000;
 			subCount.val(1000);
@@ -170,10 +313,17 @@ $(document).ready(() => {
 			topics = 1;
 			topicsCount.val(1);
 		}
-		if (subscribers && topics && pubType) {
+		if (publications && publications > 100) {
+			publications = 100;
+			pubCount.val(100);
+		} else if (publications && publications < 1) {
+			publications = 1;
+			pubCount.val(1);
+		}
+		if (subscribers && topics && publications && pubType) {
 			initSubmit.hide();
 			evalStatus.text('Initializing.....');
-			initEval(subscribers, topics, pubType)
+			initEval(subscribers, topics, pubType, publications)
 		}
 		else {
 			missingParams.show();
@@ -183,8 +333,8 @@ $(document).ready(() => {
 
 	evalSubmit.click((e) => {
 		e.preventDefault();
-		let publications = pubCount.val();
-		let delays = delayMs.val();
+		let publications = parseInt(pubCount.val());
+		let delays = parseInt(delayMs.val());
 		if (publications && publications > 100) {
 			publications = 100;
 			pubCount.val(100);
@@ -192,20 +342,16 @@ $(document).ready(() => {
 			publications = 1;
 			pubCount.val(1);
 		}
-
 		if (delays && delays < 0) {
 			delays = 0;
 			delayMs.val(0);
 		}
-
 		if (publications && delays >= 0) {
-
+			publishMessages(publications, delays)
 		}
 		else {
 			missingParams.show();
 			missingParams.hide(2000);
 		}
-
 	});
-
 });

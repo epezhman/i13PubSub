@@ -80,6 +80,11 @@
 									<input class="form-control" id="sent-publication" value="0">
 								</div>
 								<div class="form-group">
+									<label>Number of Received Publications</label>
+									<br>
+									<input class="form-control" id="got-publication" value="0">
+								</div>
+								<div class="form-group">
 									<label>Average Publications Time (ms)</label>
 									<br>
 									<input class="form-control" id="publications-time" value="0">
@@ -92,7 +97,8 @@
 								<div class="form-group">
 									<label>Evaluation Status</label>
 									<br>
-									<span class="form-control" id="evaluation-status">Not Running</span>
+									<span class="form-control" id="evaluation-status"
+										  style="color:#1a82fb;">Not Running</span>
 									<p class="help-block">Failure means Cloudant or OpenWhisk hit the limits and
 										<br> number of publications should decrease or delay should increase</p>
 								</div>
