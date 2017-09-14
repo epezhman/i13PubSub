@@ -49,6 +49,7 @@ $(document).ready(() => {
 
 	let counter = 0;
 
+	conf.set('stateless', true);
 	if (conf.get('stateless')) {
 		publishStateless.prop('checked', true);
 	}
