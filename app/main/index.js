@@ -64,7 +64,7 @@ function createEvaluationWindow() {
 		icon: "../assets/img/s.png",
 		useContentSize: true,
 		width: 800,
-		height: 750,
+		height: 780,
 		x: 400,
 		y: 0
 	});

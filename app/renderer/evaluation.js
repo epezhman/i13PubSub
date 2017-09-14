@@ -1,6 +1,5 @@
 'use strict';
 
-const request = require('request');
 const Client = require("ibmiotf");
 const eachLimit = require('async/eachLimit');
 const eachSeries = require('async/eachSeries');
@@ -78,13 +77,16 @@ function publishMessages(publicationsCount, delayMS) {
 	}
 	eachSeries(publications, (counter, cb) => {
 		if (type === 'topic-stateful') {
-			publishTopicsBasedStateful(meta, 'Message ' + counter, cb, delayMS);
+			publishTopicsBasedStateful(meta, 'Message ' + counter, delayMS, cb);
 		}
 		else if (type === 'topic-semi-stateful') {
-			publishTopicsBasedSemiStateful(meta, 'Message ' + counter, cb, delayMS);
+			publishTopicsBasedSemiStateful(meta, 'Message ' + counter, delayMS, cb);
+		}
+		else if (type === 'topic-semi-stateful-with-time-decoupling') {
+			publishTopicsBasedSemiStatefulTimeDecoupling(meta, 'Message ' + counter, delayMS, cb);
 		}
 		else if (type === 'content') {
-			publishContentsBased(meta, 'Message ' + counter, cb, delayMS);
+			publishContentsBased(meta, 'Message ' + counter, delayMS, cb);
 		}
 		sentPub.val(counter + 1);
 
@@ -97,7 +99,7 @@ function publishMessages(publicationsCount, delayMS) {
 	});
 }
 
-function publishTopicsBasedStateful(topics, message, cb, delayMs) {
+function publishTopicsBasedStateful(topics, message, delayMs, cb) {
 	ows.actions.invoke({
 		name: "pubsub/publish",
 		blocking: true,
@@ -113,7 +115,7 @@ function publishTopicsBasedStateful(topics, message, cb, delayMs) {
 	});
 }
 
-function publishTopicsBasedSemiStateful(topics, message, cb, delayMs) {
+function publishTopicsBasedSemiStateful(topics, message, delayMs, cb) {
 	ows.actions.invoke({
 		name: "pubsub/publish_stateless",
 		blocking: true,
@@ -130,7 +132,24 @@ function publishTopicsBasedSemiStateful(topics, message, cb, delayMs) {
 	});
 }
 
-function publishContentsBased(predicates, message, cb, delayMs) {
+function publishTopicsBasedSemiStatefulTimeDecoupling(topics, message, delayMs, cb) {
+	ows.actions.invoke({
+		name: "pubsub/publish_stateless",
+		blocking: true,
+		result: true,
+		params: {
+			topics: topics,
+			message: message,
+			polling_supported: true
+		}
+	}).then(result => {
+		setTimeout(cb, delayMs);
+	}).catch(err => {
+		console.error(err)
+	});
+}
+
+function publishContentsBased(predicates, message, delayMs, cb) {
 	ows.actions.invoke({
 		name: "pubsub/publish_content_based_stateless",
 		blocking: true,
@@ -240,7 +259,8 @@ function resetPrepareDevices(subscribers, topics, publications) {
 }
 
 function initEval(subscribers, topics, pubType, publications) {
-	if (pubType === 'topic-stateful' || pubType === 'topic-semi-stateful') {
+	if (pubType === 'topic-stateful' || pubType === 'topic-semi-stateful'
+		|| pubType === 'topic-semi-stateful-with-time-decoupling') {
 		ows.actions.invoke({
 			name: "pubsub/bulk_subscribe",
 			blocking: true,
