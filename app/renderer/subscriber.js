@@ -112,7 +112,7 @@ function getMessagesRealTime() {
 					let predicates = '';
 					for (let predicate in payload['predicates']) {
 						if (payload['predicates'].hasOwnProperty(predicate))
-							predicates += `${predicate}: ${payload['predicates'][predicate]}`
+							predicates += `${predicate}: ${payload['predicates'][predicate]}, `
 					}
 					receivedMessagesRealTime.prepend('<tr><td>' + predicates + '</td><td>'
 						+ payload['message'] + '</td><td>' + moment(payload['time']).format("DD-MM-YYYY HH:mm:ss") + '</td></tr>');
