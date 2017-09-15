@@ -335,9 +335,9 @@ $(document).ready(() => {
 			topics = 1;
 			topicsCount.val(1);
 		}
-		if (publications && publications > 100) {
-			publications = 100;
-			pubCount.val(100);
+		if (publications && publications > 1000) {
+			publications = 1000;
+			pubCount.val(1000);
 		} else if (publications && publications < 1) {
 			publications = 1;
 			pubCount.val(1);
@@ -360,9 +360,9 @@ $(document).ready(() => {
 		let delays = parseInt(delayMs.val());
 		let topics = parseInt(topicsCount.val());
 
-		if (publications && publications > 100) {
-			publications = 100;
-			pubCount.val(100);
+		if (publications && publications > 1000) {
+			publications = 1000;
+			pubCount.val(1000);
 		} else if (publications && publications < 1) {
 			publications = 1;
 			pubCount.val(1);
