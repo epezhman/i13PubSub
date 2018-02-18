@@ -7,6 +7,7 @@ const ConfigStore = require('configstore');
 const config = require('../config');
 const Client = require('ibmiotf');
 const moment = require('moment');
+const array = require('lodash/array');
 
 const conf = new ConfigStore(config.APP_SHORT_NAME);
 
@@ -38,52 +39,41 @@ let storedPredicates;
 let counterReal = 0;
 
 function subscribeTopics(topics) {
-	subscriber.subscribe(topics);
+	subscriber.subscribeTopic(topics);
 	subForm[0].reset();
 	subConfirmed.show();
 	subConfirmed.hide(2000);
+	let tempStoredTopics = [];
+	if (conf.has('topics_sub')) {
+		tempStoredTopics = conf.get('topics_sub');
+	}
+	let tempTopics = topics.split(',');
+	tempTopics.forEach((topic) => {
+		topic = topic.trim();
+		tempStoredTopics = array.union(tempStoredTopics, [topic]);
+	});
+	conf.set('topics_sub', tempStoredTopics);
+	alreadySubbedTopics.text(conf.get('topics_sub'));
 }
 
 function unsubscribeTopics(topics) {
-	subscriber.unsubscribe(topics);
+	subscriber.unsubscribeTopic(topics);
 	unsubForm[0].reset();
 	unsubConfirmed.show();
 	unsubConfirmed.hide(2000);
-}
-
-function getTopics(manual) {
-	if (conf.has('sub_id')) {
-		let getT = subscriber.getTopics();
-		getT.then((res) => {
-			alreadySubbedTopics.text(res);
+	let tempStoredTopics = [];
+	if (conf.has('topics_sub')) {
+		tempStoredTopics = conf.get('topics_sub');
+	}
+	let tempTopics = topics.split(',');
+	tempTopics.forEach((topic) => {
+		topic = topic.trim();
+		tempStoredTopics = array.remove(tempStoredTopics, function (storedTopic) {
+			return storedTopic !== topic
 		});
-	}
-	if (!manual) {
-		setTimeout(getTopics, 2000);
-	}
-}
-
-function updateLastSeen() {
-	if (conf.has('sub_id')) {
-		subscriber.updateLastSeen();
-	}
-	setTimeout(updateLastSeen, 2000);
-}
-
-function getMessagesPolling() {
-	if (conf.has('sub_id')) {
-		let getM = subscriber.getMessages();
-		getM.then((result) => {
-			if (result !== "None") {
-				result.forEach((res) => {
-					counterReal += 1;
-					realTimeMessageCounter.text(counterReal);
-					receivedMessagesRealTime.prepend('<tr><td>' + res.topic + '</td><td>'
-						+ res.message + '</td><td>' + moment(res.timestamp).format("DD-MM-YYYY HH:mm:ss") + '</td></tr>');
-				});
-			}
-		});
-	}
+	});
+	conf.set('topics_sub', tempStoredTopics);
+	alreadySubbedTopics.text(conf.get('topics_sub'));
 }
 
 function getMessagesRealTime() {
@@ -125,14 +115,6 @@ function getMessagesRealTime() {
 	}
 }
 
-function initFunctions() {
-	conf.set('stateless', true);
-	getTopics();
-	getMessagesPolling();
-	setTimeout(updateLastSeen, 5000);
-	getMessagesRealTime();
-
-}
 
 let regCounter = 100;
 
@@ -174,8 +156,12 @@ $(document).ready(() => {
 		storedPredicates.text(conf.get('predicates'));
 	}
 
+	if (conf.has('topics_sub')) {
+		alreadySubbedTopics.text(conf.get('topics_sub'));
+	}
+
 	if (conf.has('sub_id')) {
-		initFunctions();
+		getMessagesRealTime();
 		subActions.show();
 		subscriberId.val(conf.get('sub_id'))
 	}
@@ -241,7 +227,6 @@ $(document).ready(() => {
 			predicatesConfirmed.show();
 			predicatesConfirmed.hide(2000);
 		}
-
 	});
 
 	registerSub.click((e) => {

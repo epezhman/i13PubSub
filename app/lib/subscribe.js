@@ -4,7 +4,6 @@ module.exports.subscribeTopic = subscribeTopic;
 module.exports.unsubscribeTopic = unsubscribeTopic;
 module.exports.register = register;
 module.exports.testRegister = testRegister;
-module.exports.getTopics = getTopics;
 module.exports.subscribePredicates = subscribePredicates;
 module.exports.subscribeFunction = subscribeFunction;
 module.exports.unsubscribeFunction = unsubscribeFunction;
@@ -94,26 +93,6 @@ function testRegister() {
 		}
 	}).catch((err) => {
 		return false
-	});
-}
-
-function getTopics() {
-	let reg_options = {
-		uri: config.GET_TOPICS_URL,
-		qs: {
-			subscriber_id: conf.get('sub_id')
-		},
-		json: true
-	};
-	return requestp(reg_options).then((result) => {
-		if (result.hasOwnProperty('topics') && result['topics'].length) {
-			return result['topics']
-		}
-		else {
-			return "None"
-		}
-	}).catch((err) => {
-		return "None"
 	});
 }
 
