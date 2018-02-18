@@ -112,13 +112,13 @@
 									<h4>Function-Based Matching</h4>
 									<form id="function-form">
 										<div class="form-group">
-											<label>Functions Type</label>
+											<label>Function Type</label>
 											<br>
 											<input class="form-control" placeholder="Function Type"
 												   id="function-type" required>
 										</div>
 										<div class="form-group">
-											<label>Functions Input Names</label>
+											<label>Function Input Names</label>
 											<br>
 											<input class="form-control" placeholder="Function Input Name"
 												   id="function-inputs" required>
@@ -140,12 +140,30 @@
 													id="function-submit">
 												Subscribe
 											</button>
-											<p class="help-block">New function will overwrite the existing ones.
+											<p class="help-block">New function with same type overwrite the existing ones.
 												<br> Empty submissions will remove existing functions</p>
 										</div>
 										<p class="help-block success" id="functions-confirmed"
 										   style="display: none">
-											Predicted Submitted!</p>
+											Function Submitted!</p>
+									</form>
+									<hr>
+									<form id="unsub-function-form">
+										<div class="form-group">
+											<label>Function Type to Unsubscribe</label>
+											<br>
+											<input class="form-control" placeholder="Functions to Unsubscribe"
+												   id="unsub-functions" required>
+										</div>
+										<div class="form-actions">
+											<button type="button" class="btn btn-form btn-primary" id="unsub-function-submit">
+												Unsubscribe
+											</button>
+										</div>
+										<div class=form-control"">
+											<p class="help-block success" id="unsubed-function-confirmed" style="display: none">
+												Functions Unsubscribed!</p>
+										</div>
 									</form>
 									<hr>
 									<h6>Subscribed Function</h6>

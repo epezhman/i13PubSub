@@ -35,6 +35,17 @@ let predicateSubmit;
 let predicatesConfirmed;
 let predicatesFormatError;
 let storedPredicates;
+let functionSubType;
+let functionSubInput;
+let functionSubDef;
+let functionSubButton;
+let functionUnsubButton;
+let functionUnsubType;
+let functionSubMessage;
+let functionUnsubMessage;
+let functionSubForm;
+let functionUnsubForm;
+let functionSubbed;
 
 let counterReal = 0;
 
@@ -76,6 +87,38 @@ function unsubscribeTopics(topics) {
 	alreadySubbedTopics.text(conf.get('topics_sub'));
 }
 
+function subscribeFunctions(sub_type, inputs, func_sub) {
+	subscriber.subscribeFunction(sub_type, inputs, func_sub);
+	functionSubForm[0].reset();
+	functionSubMessage.show();
+	functionSubMessage.hide(2000);
+	let tempStoredFunctions = [];
+	if (conf.has('func_sub')) {
+		tempStoredFunctions = conf.get('func_sub');
+	}
+	sub_type = sub_type.trim();
+	tempStoredFunctions = array.union(tempStoredFunctions, [sub_type]);
+	conf.set('func_sub', tempStoredFunctions);
+	functionSubbed.text(conf.get('func_sub'));
+}
+
+function unsubscribeFunctions(sub_type) {
+	subscriber.unsubscribeFunction(sub_type);
+	functionUnsubForm[0].reset();
+	functionUnsubMessage.show();
+	functionUnsubMessage.hide(2000);
+	let tempStoredFunctions = [];
+	if (conf.has('func_sub')) {
+		tempStoredFunctions = conf.get('func_sub');
+	}
+	sub_type = sub_type.trim();
+	tempStoredFunctions = array.remove(tempStoredFunctions, function (storedFunc) {
+		return storedFunc !== sub_type
+	});
+	conf.set('func_sub', tempStoredFunctions);
+	functionSubbed.text(conf.get('func_sub'));
+}
+
 function getMessagesRealTime() {
 	if (conf.has('sub_id')) {
 		const deviceConfig = {
@@ -107,6 +150,10 @@ function getMessagesRealTime() {
 					receivedMessagesRealTime.prepend('<tr><td>' + predicates + '</td><td>'
 						+ payload['message'] + '</td><td>' + moment(payload['time']).format("DD-MM-YYYY HH:mm:ss") + '</td></tr>');
 				}
+				else if (payload.hasOwnProperty('function_type')) {
+					receivedMessagesRealTime.prepend('<tr><td>' + payload['function_type'] + '</td><td>'
+						+ payload['message'] + '</td><td>' + moment(payload['time']).format("DD-MM-YYYY HH:mm:ss") + '</td></tr>');
+				}
 			}
 		});
 		deviceClient.on("error", function (err) {
@@ -114,7 +161,6 @@ function getMessagesRealTime() {
 		});
 	}
 }
-
 
 let regCounter = 100;
 
@@ -151,6 +197,17 @@ $(document).ready(() => {
 	predicateSubmit = $('#predicate-submit');
 	predicatesConfirmed = $('#predicates-confirmed');
 	predicatesFormatError = $('#predicates-format-error');
+	functionSubType = $('#function-type');
+	functionSubInput = $('#function-inputs');
+	functionSubDef = $('#function-def');
+	functionSubButton = $('#function-submit');
+	functionSubMessage = $('#functions-confirmed');
+	functionUnsubButton = $('#unsub-function-submit');
+	functionUnsubType = $('#unsub-functions');
+	functionUnsubMessage = $('#unsubed-function-confirmed');
+	functionSubForm = $('#function-form');
+	functionUnsubForm = $('#unsub-function-form');
+	functionSubbed = $('#subbed-functions');
 
 	if (conf.has('predicates')) {
 		storedPredicates.text(conf.get('predicates'));
@@ -158,6 +215,10 @@ $(document).ready(() => {
 
 	if (conf.has('topics_sub')) {
 		alreadySubbedTopics.text(conf.get('topics_sub'));
+	}
+
+	if (conf.has('func_sub')) {
+		functionSubbed.text(conf.get('func_sub'));
 	}
 
 	if (conf.has('sub_id')) {
@@ -201,6 +262,24 @@ $(document).ready(() => {
 		}
 	});
 
+	functionSubButton.click((e) => {
+		e.preventDefault();
+		let funcType = functionSubType.val().trim();
+		let funcInputs = functionSubInput.val().trim();
+		let funcDef = functionSubDef.val().trim();
+		if (funcType && funcInputs && funcDef) {
+			subscribeFunctions(funcType, funcInputs, funcDef);
+		}
+	});
+
+	functionUnsubButton.click((e) => {
+		e.preventDefault();
+		let funcType = functionUnsubType.val().trim();
+		if (funcType) {
+			unsubscribeFunctions(funcType);
+		}
+	});
+
 	predicateSubmit.click((e) => {
 		e.preventDefault();
 		let predicates = subscribedPredicates.val().trim();
@@ -234,7 +313,6 @@ $(document).ready(() => {
 		let reg = subscriber.register();
 		reg.then((res) => {
 			if (res) {
-				initFunctions();
 				registerSub.hide();
 				subActions.show();
 				subscriberId.val(conf.get('sub_id'))
