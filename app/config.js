@@ -62,5 +62,10 @@ module.exports = {
 	PUB_PREDICATE: {
 		type_1: 'news',
 		popularity_1: 300
+	},
+	FUNCTION_SUB: {
+		sub_type: 'text_analyze',
+		matching_input: "a,",
+		matching_function : "return (a + 2) === 5"
 	}
 };

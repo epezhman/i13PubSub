@@ -72,21 +72,21 @@ function publishMessages(publicationsCount, delayMS) {
 	if (type === 'content') {
 		meta = JSON.stringify(config.PUB_PREDICATE);
 	}
-	else {
+	else if (type === 'content') {
 		meta = config.TOPICS.slice(0, topicCount).toString();
 	}
+	else if (type === 'function-pub') {
+		meta = config.FUNCTION_SUB;
+	}
 	eachSeries(publications, (counter, cb) => {
-		if (type === 'topic-stateful') {
-			publishTopicsBasedStateful(meta, 'Message ' + counter, delayMS, cb);
-		}
-		else if (type === 'topic-semi-stateful') {
-			publishTopicsBasedSemiStateful(meta, 'Message ' + counter, delayMS, cb);
-		}
-		else if (type === 'topic-semi-stateful-with-time-decoupling') {
-			publishTopicsBasedSemiStatefulTimeDecoupling(meta, 'Message ' + counter, delayMS, cb);
+		if (type === 'topic-pub') {
+			publishTopicsBased(meta, 'Message ' + counter, delayMS, cb);
 		}
 		else if (type === 'content') {
 			publishContentsBased(meta, 'Message ' + counter, delayMS, cb);
+		}
+		else if (type === 'function-pub') {
+			publishFunctionBased(meta, 'Message ' + counter, delayMS, cb);
 		}
 		sentPub.val(counter + 1);
 
@@ -99,42 +99,9 @@ function publishMessages(publicationsCount, delayMS) {
 	});
 }
 
-function publishTopicsBasedStateful(topics, message, delayMs, cb) {
+function publishTopicsBased(topics, message, delayMs, cb) {
 	ows.actions.invoke({
-		name: "pubsub/publish",
-		blocking: true,
-		result: true,
-		params: {
-			topics: topics,
-			message: message
-		}
-	}).then(result => {
-		setTimeout(cb, delayMs);
-	}).catch(err => {
-		console.error(err)
-	});
-}
-
-function publishTopicsBasedSemiStateful(topics, message, delayMs, cb) {
-	ows.actions.invoke({
-		name: "pubsub/publish_stateless",
-		blocking: true,
-		result: true,
-		params: {
-			topics: topics,
-			message: message,
-			polling_supported: false
-		}
-	}).then(result => {
-		setTimeout(cb, delayMs);
-	}).catch(err => {
-		console.error(err)
-	});
-}
-
-function publishTopicsBasedSemiStatefulTimeDecoupling(topics, message, delayMs, cb) {
-	ows.actions.invoke({
-		name: "pubsub/publish_stateless",
+		name: "pubsub/publish_topic_based_1",
 		blocking: true,
 		result: true,
 		params: {
@@ -151,11 +118,29 @@ function publishTopicsBasedSemiStatefulTimeDecoupling(topics, message, delayMs, 
 
 function publishContentsBased(predicates, message, delayMs, cb) {
 	ows.actions.invoke({
-		name: "pubsub/publish_content_based_stateless",
+		name: "pubsub/publish_content_based_1",
 		blocking: true,
 		result: true,
 		params: {
 			predicates: predicates,
+			message: message
+		}
+	}).then(result => {
+		setTimeout(cb, delayMs);
+	}).catch(err => {
+		console.error(err)
+	});
+}
+
+function publishFunctionBased(meta, message, delayMs, cb) {
+	ows.actions.invoke({
+		name: "pubsub/publish_function_based_1",
+		blocking: true,
+		result: true,
+		params: {
+			sub_type: meta['sub_type'],
+			matching_input: meta['matching_input'],
+			matching_function: meta['matching_function'],
 			message: message
 		}
 	}).then(result => {
@@ -259,8 +244,7 @@ function resetPrepareDevices(subscribers, topics, publications) {
 }
 
 function initEval(subscribers, topics, pubType, publications) {
-	if (pubType === 'topic-stateful' || pubType === 'topic-semi-stateful'
-		|| pubType === 'topic-semi-stateful-with-time-decoupling') {
+	if (pubType === 'topic-pub') {
 		ows.actions.invoke({
 			name: "pubsub/bulk_subscribe",
 			blocking: true,
@@ -288,6 +272,9 @@ function initEval(subscribers, topics, pubType, publications) {
 		}).catch(err => {
 			console.error(err)
 		});
+	}
+	else if (pubType === 'function-pub') {
+		// HERE
 	}
 }
 
