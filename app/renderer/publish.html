@@ -31,18 +31,6 @@
 									<input class="form-control" placeholder="Topics" id="pub-topics">
 									<p class="help-block">The topics can be separated by comma</p>
 								</div>
-								<div class="checkbox" style="display: none;">
-									<label>
-										<input type="checkbox" id="publish-stateless" checked="checked"> Publish
-										Semi-stateless
-									</label>
-								</div>
-								<div class="checkbox" style="display: none;">
-									<label>
-										<input type="checkbox" id="support-polling" checked="checked"> Support Time Decoupling
-										with Semi-stateless Publish
-									</label>
-								</div>
 							</td>
 							<td valign="top" class="td-predicates">
 								<div class="radio">
@@ -61,6 +49,19 @@
 										<br>
 										Note: Time decoupling is not available for content-based matching
 									</p>
+								</div>
+							</td>
+							<td valign="top" class="td-functions">
+								<div class="radio">
+									<label style="font-weight: bold">
+										<input type="radio" name="publish-type" value="function-match">
+										Function-Based Matching
+									</label>
+								</div>
+								<div class="form-group">
+									<label>Function Type</label>
+									<br>
+									<input class="form-control" placeholder="Topics" id="pub-function-type">
 								</div>
 							</td>
 						</tr>
@@ -86,6 +87,7 @@
 						<div class=form-control"">
 							<p class="help-block success" id="pub-published" style="display: none">Message Published!</p>
 							<p class="help-block error" id="pub-error-topics" style="display: none">Topics Missing!</p>
+							<p class="help-block error" id="pub-error-function" style="display: none">Function Type Missing!</p>
 							<p class="help-block error" id="pub-error-predicates" style="display: none">Predicates Missing or Wrong Format!</p>
 							<p class="help-block error" id="pub-error-message" style="display: none">Message Missing!</p>
 						</div>

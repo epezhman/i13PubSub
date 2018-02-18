@@ -109,6 +109,49 @@
 									<h6>Subscribed Predicates</h6>
 									<p class="subs-topics" id="subbed-predicates">None</p>
 								</td>
+								<td valign="top" class="td-functions">
+									<h4>Function-Based Matching</h4>
+									<form id="function-form">
+										<div class="form-group">
+											<label>Functions Type</label>
+											<br>
+											<input class="form-control" placeholder="Function Type"
+												   id="function-type" required>
+										</div>
+										<div class="form-group">
+											<label>Functions Input Names</label>
+											<br>
+											<input class="form-control" placeholder="Function Input Name"
+												   id="function-inputs" required>
+											<p class="help-block">The input can be separated by comma</p>
+										</div>
+										<div class="form-group">
+											<label>Function Definition</label>
+											<br>
+											<textarea class="form-control" rows="5" id="function-def"
+													  placeholder="Function Definition"></textarea>
+											<p class="help-block">
+												return (p + 5) === 7
+												<br>
+												p is the publication
+											</p>
+										</div>
+										<div class="form-actions">
+											<button type="button" class="btn btn-form btn-primary"
+													id="function-submit">
+												Subscribe
+											</button>
+											<p class="help-block">New function will overwrite the existing ones.
+												<br> Empty submissions will remove existing functions</p>
+										</div>
+										<p class="help-block success" id="functions-confirmed"
+										   style="display: none">
+											Predicted Submitted!</p>
+									</form>
+									<hr>
+									<h6>Subscribed Function</h6>
+									<p class="subs-topics" id="subbed-functions">None</p>
+								</td>
 							</tr>
 							</tbody>
 						</table>

@@ -14,15 +14,13 @@ let pubSubmit;
 let pubSubmitCounter;
 let pubSpanCounter;
 let pubPublished;
-let publishStateless;
-let supportPolling;
 let pubErrorTopicsMissing;
 let pubErrorPredicatesMissing;
 let pubErrorMessageMissing;
 let predicatesArea;
 
 function publishTopicBasedMessage(topics, message) {
-	publish.publishTopicsBased(topics, message, publishStateless.is(':checked'), supportPolling.is(':checked'));
+	publish.publishTopicsBased(topics, message);
 	pubPublished.show();
 	pubPublished.hide(2000);
 }
@@ -40,28 +38,12 @@ $(document).ready(() => {
 	pubPublished = $('#pub-published');
 	pubSubmitCounter = $('#pub-submit-counter');
 	pubSpanCounter = $('#counter-span');
-	publishStateless = $('#publish-stateless');
-	supportPolling = $('#support-polling');
 	pubErrorMessageMissing = $('#pub-error-message');
 	pubErrorPredicatesMissing = $('#pub-error-predicates');
 	pubErrorTopicsMissing = $('#pub-error-topics');
 	predicatesArea = $('#predicates');
 
 	let counter = 0;
-
-	conf.set('stateless', true);
-	if (conf.get('stateless')) {
-		publishStateless.prop('checked', true);
-	}
-
-	publishStateless.on('change', () => {
-		if (publishStateless.is(':checked')) {
-			conf.set('stateless', true);
-		}
-		else {
-			conf.set('stateless', false);
-		}
-	});
 
 	pubSubmit.click((e) => {
 		e.preventDefault();

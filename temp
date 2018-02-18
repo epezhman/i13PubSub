@@ -1,0 +1,27 @@
+ok: created API /pubsub/subscribe_topics POST for action /_/pubsub/subscribe_topics
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/subscribe_topics
+ok: created API /pubsub/unsubscribe_topics POST for action /_/pubsub/unsubscribe_topics
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/unsubscribe_topics
+ok: created API /pubsub/get_subscribed_topics GET for action /_/pubsub/get_sub_topics
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/get_subscribed_topics
+ok: created API /pubsub/register_subscriber GET for action /_/pubsub/register_subscriber
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/register_subscriber
+ok: created API /pubsub/publish_topic_based_1 POST for action /_/pubsub/publish_topic_based_1
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/publish_topic_based_1
+ok: created API /pubsub/publish_content_based_1 POST for action /_/pubsub/publish_content_based_1
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/publish_content_based_1
+ok: created API /pubsub/subscribe_predicates POST for action /_/pubsub/subscribe_predicates
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/subscribe_predicates
+ok: created API /pubsub/bulk_subscribe_predicates POST for action /_/pubsub/bulk_subscribe_predicates
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/bulk_subscribe_predicates
+ok: created API /pubsub/bulk_subscribe_topics POST for action /_/pubsub/bulk_subscribe_topics
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/bulk_subscribe_topics
+ok: created API /pubsub/subscribe_functions POST for action /_/pubsub/subscribe_functions
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/subscribe_functions
+ok: created API /pubsub/unsubscribe_functions POST for action /_/pubsub/unsubscribe_functions
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/unsubscribe_functions
+ok: created API /pubsub/bulk_subscribe_function POST for action /_/pubsub/bulk_subscribe_function
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/bulk_subscribe_function
+ok: created API /pubsub/publish_function_based_1 POST for action /_/pubsub/publish_function_based_1
+https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/975978695c5ef5a48072132c858c3252dd07f9bac01dda92c86234288bc29aee/pubsub/publish_function_based_1
+Install Complete

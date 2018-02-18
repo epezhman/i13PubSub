@@ -1,14 +1,13 @@
 'use strict';
 
-module.exports.subscribe = subscribe;
-module.exports.unsubscribe = unsubscribe;
+module.exports.subscribeTopic = subscribeTopic;
+module.exports.unsubscribeTopic = unsubscribeTopic;
 module.exports.register = register;
 module.exports.testRegister = testRegister;
-module.exports.getMessages = getMessages;
 module.exports.getTopics = getTopics;
-module.exports.updateLastSeen = updateLastSeen;
 module.exports.subscribePredicates = subscribePredicates;
-
+module.exports.subscribeFunction = subscribeFunction;
+module.exports.unsubscribeFunction = unsubscribeFunction;
 
 const requestp = require('request-promise');
 const iot = require('./iot');
@@ -18,9 +17,9 @@ const ConfigStore = require('configstore');
 
 const conf = new ConfigStore(config.APP_SHORT_NAME);
 
-function subscribe(topics) {
+function subscribeTopic(topics) {
 	request.post({
-		url: config.SUBSCRIBE_URL,
+		url: config.SUBSCRIBE_TOPIC_URL,
 		form: {
 			topics: topics,
 			subscriber_id: conf.get('sub_id'),
@@ -32,9 +31,9 @@ function subscribe(topics) {
 	});
 }
 
-function unsubscribe(topics) {
+function unsubscribeTopic(topics) {
 	request.post({
-		url: config.UNSUBSCRIBE_URL,
+		url: config.UNSUBSCRIBE_TOPIC_URL,
 		form: {
 			topics: topics,
 			subscriber_id: conf.get('sub_id'),
@@ -98,19 +97,6 @@ function testRegister() {
 	});
 }
 
-function updateLastSeen() {
-	let reg_options = {
-		uri: config.SUBSCRIBE_LAST_SEEN_URL,
-		qs: {
-			subscriber_id: conf.get('sub_id')
-		},
-		json: true
-	};
-	return requestp(reg_options).catch((err) => {
-		console.log(err);
-	});
-}
-
 function getTopics() {
 	let reg_options = {
 		uri: config.GET_TOPICS_URL,
@@ -131,23 +117,32 @@ function getTopics() {
 	});
 }
 
-function getMessages() {
-	let reg_options = {
-		uri: config.GET_MESSAGES_URL,
-		qs: {
+function subscribeFunction(sub_type, matching_input, matching_function) {
+	request.post({
+		url: config.SUBSCRIBE_FUNCTION_URL,
+		form: {
+			sub_type: sub_type,
+			matching_input: matching_input,
+			matching_function: matching_function,
 			subscriber_id: conf.get('sub_id'),
-			stateless: !!conf.get('stateless')
-		},
-		json: true
-	};
-	return requestp(reg_options).then((result) => {
-		if (result.hasOwnProperty('docs') && result['docs'].length) {
-			return result['docs']
 		}
-		else {
-			return "None"
+	}, (err, httpResponse, body) => {
+		if (err) {
+			console.error(err)
 		}
-	}).catch((err) => {
-		return "None"
+	});
+}
+
+function unsubscribeFunction(sub_type) {
+	request.post({
+		url: config.UNSUBSCRIBE_FUNCTION_URL,
+		form: {
+			sub_type: sub_type,
+			subscriber_id: conf.get('sub_id'),
+		}
+	}, (err, httpResponse, body) => {
+		if (err) {
+			console.error(err)
+		}
 	});
 }
