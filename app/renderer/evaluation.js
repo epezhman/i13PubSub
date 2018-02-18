@@ -72,7 +72,7 @@ function publishMessages(publicationsCount, delayMS) {
 	if (type === 'content') {
 		meta = JSON.stringify(config.PUB_PREDICATE);
 	}
-	else if (type === 'content') {
+	else if (type === 'topic-pub') {
 		meta = config.TOPICS.slice(0, topicCount).toString();
 	}
 	else if (type === 'function-pub') {
@@ -86,7 +86,7 @@ function publishMessages(publicationsCount, delayMS) {
 			publishContentsBased(meta, 'Message ' + counter, delayMS, cb);
 		}
 		else if (type === 'function-pub') {
-			publishFunctionBased(meta, 'Message ' + counter, delayMS, cb);
+			publishFunctionBased(meta, delayMS, cb);
 		}
 		sentPub.val(counter + 1);
 
@@ -106,8 +106,7 @@ function publishTopicsBased(topics, message, delayMs, cb) {
 		result: true,
 		params: {
 			topics: topics,
-			message: message,
-			polling_supported: true
+			message: message
 		}
 	}).then(result => {
 		setTimeout(cb, delayMs);
@@ -132,7 +131,7 @@ function publishContentsBased(predicates, message, delayMs, cb) {
 	});
 }
 
-function publishFunctionBased(meta, message, delayMs, cb) {
+function publishFunctionBased(meta, delayMs, cb) {
 	ows.actions.invoke({
 		name: "pubsub/publish_function_based_1",
 		blocking: true,
@@ -141,7 +140,7 @@ function publishFunctionBased(meta, message, delayMs, cb) {
 			sub_type: meta['sub_type'],
 			matching_input: meta['matching_input'],
 			matching_function: meta['matching_function'],
-			message: message
+			message: meta['matching_pub']
 		}
 	}).then(result => {
 		setTimeout(cb, delayMs);
@@ -246,7 +245,7 @@ function resetPrepareDevices(subscribers, topics, publications) {
 function initEval(subscribers, topics, pubType, publications) {
 	if (pubType === 'topic-pub') {
 		ows.actions.invoke({
-			name: "pubsub/bulk_subscribe",
+			name: "pubsub/bulk_subscribe_topics",
 			blocking: true,
 			result: true,
 			params: {
@@ -274,7 +273,21 @@ function initEval(subscribers, topics, pubType, publications) {
 		});
 	}
 	else if (pubType === 'function-pub') {
-		// HERE
+		ows.actions.invoke({
+			name: "pubsub/bulk_subscribe_function",
+			blocking: true,
+			result: true,
+			params: {
+				sub_type: config.FUNCTION_SUB.sub_type,
+				matching_input: config.FUNCTION_SUB.matching_input,
+				matching_function: config.FUNCTION_SUB.matching_function,
+				subscribers: config.SUBSCRIBERS.slice(0, subscribers).toString()
+			}
+		}).then(result => {
+			resetPrepareDevices(subscribers, topics, publications);
+		}).catch(err => {
+			console.error(err)
+		});
 	}
 }
 

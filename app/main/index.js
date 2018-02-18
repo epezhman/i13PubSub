@@ -43,7 +43,7 @@ function createSubscribeWindow() {
 		icon: "../assets/img/s.png",
 		useContentSize: true,
 		width: 800,
-		height: 900,
+		height: 1000,
 		x: 950,
 		y: 0
 	});

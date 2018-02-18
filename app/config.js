@@ -65,6 +65,7 @@ module.exports = {
 	FUNCTION_SUB: {
 		sub_type: 'text_analyze',
 		matching_input: "a,",
-		matching_function : "return (a + 2) === 5"
+		matching_pub: 3,
+		matching_function : "return (parseInt(a) + 2) === 5"
 	}
 };

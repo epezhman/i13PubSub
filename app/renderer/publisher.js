@@ -16,8 +16,10 @@ let pubSpanCounter;
 let pubPublished;
 let pubErrorTopicsMissing;
 let pubErrorPredicatesMissing;
+let pubErrorFunctionMissing;
 let pubErrorMessageMissing;
 let predicatesArea;
+let functionType;
 
 function publishTopicBasedMessage(topics, message) {
 	publish.publishTopicsBased(topics, message);
@@ -27,6 +29,12 @@ function publishTopicBasedMessage(topics, message) {
 
 function publishContentBasedMessage(predicates, message) {
 	publish.publishContentsBased(predicates, message);
+	pubPublished.show();
+	pubPublished.hide(2000);
+}
+
+function publishFunctionBasedMessage(function_type, message) {
+	publish.publishFunctionBased(function_type, message);
 	pubPublished.show();
 	pubPublished.hide(2000);
 }
@@ -42,6 +50,9 @@ $(document).ready(() => {
 	pubErrorPredicatesMissing = $('#pub-error-predicates');
 	pubErrorTopicsMissing = $('#pub-error-topics');
 	predicatesArea = $('#predicates');
+	pubErrorFunctionMissing = $('#pub-error-function');
+	functionType = $('#pub-function-type');
+
 
 	let counter = 0;
 
@@ -51,6 +62,7 @@ $(document).ready(() => {
 		let topics = pubTopics.val().trim();
 		let predicates = predicatesArea.val().trim();
 		let jsonPredicate = utils.JSONifyPublisherPredicates(predicates);
+		let function_type = functionType.val().trim();
 
 		let message = pubMessage.val().trim();
 		if (!topics && selectedPubType === 'topic') {
@@ -60,6 +72,10 @@ $(document).ready(() => {
 		if (!jsonPredicate && selectedPubType === 'content') {
 			pubErrorPredicatesMissing.show();
 			pubErrorPredicatesMissing.hide(2000);
+		}
+		if (!function_type && selectedPubType === 'function-match') {
+			pubErrorFunctionMissing.show();
+			pubErrorFunctionMissing.hide(2000);
 		}
 		if (!message) {
 			pubErrorMessageMissing.show();
@@ -71,6 +87,9 @@ $(document).ready(() => {
 		if (jsonPredicate && message && selectedPubType === 'content') {
 			publishContentBasedMessage(jsonPredicate, message);
 		}
+		if (function_type && message && selectedPubType === 'function-match') {
+			publishFunctionBasedMessage(function_type, message);
+		}
 	});
 
 	pubSubmitCounter.click((e) => {
@@ -79,6 +98,7 @@ $(document).ready(() => {
 		let topics = pubTopics.val().trim();
 		let predicates = predicatesArea.val().trim();
 		let jsonPredicate = utils.JSONifyPublisherPredicates(predicates);
+		let function_type = functionType.val().trim();
 
 		if (!topics && selectedPubType === 'topic') {
 			pubErrorTopicsMissing.show();
@@ -88,6 +108,11 @@ $(document).ready(() => {
 			pubErrorPredicatesMissing.show();
 			pubErrorPredicatesMissing.hide(2000);
 		}
+		if (!function_type && selectedPubType === 'function-match') {
+			pubErrorFunctionMissing.show();
+			pubErrorFunctionMissing.hide(2000);
+		}
+
 		if (topics && selectedPubType === 'topic') {
 			counter += 1;
 			pubSpanCounter.text(counter);
@@ -97,6 +122,11 @@ $(document).ready(() => {
 			counter += 1;
 			pubSpanCounter.text(counter);
 			publishContentBasedMessage(jsonPredicate, counter.toString());
+		}
+		if (function_type && selectedPubType === 'function-match') {
+			counter += 1;
+			pubSpanCounter.text(counter);
+			publishFunctionBasedMessage(function_type, counter.toString());
 		}
 	});
 
