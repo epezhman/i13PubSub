@@ -1,9 +1,8 @@
 'use strict';
 
 const secrets = require('./secrets.config');
-
-
 const appPackage = require('./package.json');
+
 const APP_SHORT_NAME = appPackage.name;
 const APP_NAME = appPackage.productName;
 const APP_VERSION = appPackage.version;
@@ -36,7 +35,7 @@ module.exports = {
 
 	OPENWHISK_API_KEY: secrets.OPENWHISK_API_KEY,
 	OPENWHISK_API_HOST: secrets.OPENWHISK_API_HOST,
-	OPENWHISK_NAMESPACE : secrets.OPENWHISK_NAMESPACE,
+	OPENWHISK_NAMESPACE: secrets.OPENWHISK_NAMESPACE,
 
 	WATSON_IOT_REGISTER_PASSWORD: secrets.WATSON_IOT_REGISTER_PASSWORD,
 	WATSON_IOT_API_USERNAME: secrets.WATSON_IOT_API_USERNAME,
@@ -66,6 +65,71 @@ module.exports = {
 		sub_type: 'text_analyze',
 		matching_input: "a,",
 		matching_pub: 3,
-		matching_function : "return (parseInt(a) + 2) === 5"
+		matching_function: "return (parseInt(a) + 2) === 5"
+	},
+	EVAL_DELAY: 100,
+	EVAL_TOPICS: 1,
+	EVAL_NODE_COUNT: 4,
+	EVALS: {
+		eval_1_1: {
+			sub_count: 100,
+			pub_count: 5
+		},
+		eval_1_2: {
+			sub_count: 150,
+			pub_count: 5
+		},
+		eval_1_3: {
+			sub_count: 200,
+			pub_count: 5
+		},
+		eval_1_4: {
+			sub_count: 250,
+			pub_count: 5
+		},
+		eval_1_5: {
+			sub_count: 300,
+			pub_count: 5
+		},
+		eval_2_1: {
+			sub_count: 100,
+			pub_count: 10
+		},
+		eval_2_2: {
+			sub_count: 150,
+			pub_count: 10
+		},
+		eval_2_3: {
+			sub_count: 200,
+			pub_count: 10
+		},
+		eval_2_4: {
+			sub_count: 250,
+			pub_count: 10
+		},
+		eval_2_5: {
+			sub_count: 300,
+			pub_count: 10
+		},
+		eval_3_1: {
+			sub_count: 100,
+			pub_count: 15
+		},
+		eval_3_2: {
+			sub_count: 150,
+			pub_count: 15
+		},
+		eval_3_3: {
+			sub_count: 200,
+			pub_count: 15
+		},
+		eval_3_4: {
+			sub_count: 250,
+			pub_count: 15
+		},
+		eval_3_5: {
+			sub_count: 300,
+			pub_count: 15
+		},
 	}
 };
