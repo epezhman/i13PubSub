@@ -2,11 +2,13 @@
 
 module.exports.register = register;
 module.exports.getMessages = getMessages;
+module.exports.bulkRegisterAll = bulkRegisterAll;
 
 const Client = require("ibmiotf");
 const request = require('request');
 const config = require('../config');
 const ConfigStore = require('configstore');
+const eachLimit = require('async/eachLimit');
 
 const conf = new ConfigStore(config.APP_SHORT_NAME);
 
@@ -61,5 +63,19 @@ function getMessages() {
 
 	deviceClient.on("error", function (err) {
 		console.error(err)
+	});
+}
+
+function bulkRegisterAll() {
+	register(conf.get('sub_id'));
+	eachLimit(config.SUBSCRIBERS, 1, function (sub_id, callback) {
+		console.log('Registering: ' + sub_id);
+		register(sub_id);
+		setTimeout(callback, 100);
+
+	}, function (err) {
+		if (err) {
+			console.log('Failed: ' + sub_id);
+		}
 	});
 }

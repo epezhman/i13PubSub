@@ -2,6 +2,7 @@
 
 const electron = require('electron');
 const {ipcMain} = require('electron');
+const iot = require('../lib/iot');
 
 const app = electron.app;
 
@@ -133,4 +134,8 @@ ipcMain.on('open-evaluation', (event, arg) => {
 	if (!evaluationWindow) {
 		evaluationWindow = createEvaluationWindow();
 	}
+});
+
+ipcMain.on('register-iots', (event, arg) => {
+	iot.bulkRegisterAll();
 });
