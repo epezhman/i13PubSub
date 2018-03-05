@@ -71,63 +71,63 @@ module.exports = {
 	EVAL_TOPICS: 1,
 	EVAL_NODE_COUNT: 4,
 	EVALS: {
-		eval_1_1: {
+		e11: {
 			sub_count: 100,
 			pub_count: 5
 		},
-		eval_1_2: {
+		e12: {
 			sub_count: 150,
 			pub_count: 5
 		},
-		eval_1_3: {
+		e13: {
 			sub_count: 200,
 			pub_count: 5
 		},
-		eval_1_4: {
+		e14: {
 			sub_count: 250,
 			pub_count: 5
 		},
-		eval_1_5: {
+		e15: {
 			sub_count: 300,
 			pub_count: 5
 		},
-		eval_2_1: {
+		e21: {
 			sub_count: 100,
 			pub_count: 10
 		},
-		eval_2_2: {
+		e22: {
 			sub_count: 150,
 			pub_count: 10
 		},
-		eval_2_3: {
+		e23: {
 			sub_count: 200,
 			pub_count: 10
 		},
-		eval_2_4: {
+		e24: {
 			sub_count: 250,
 			pub_count: 10
 		},
-		eval_2_5: {
+		e25: {
 			sub_count: 300,
 			pub_count: 10
 		},
-		eval_3_1: {
+		e31: {
 			sub_count: 100,
 			pub_count: 15
 		},
-		eval_3_2: {
+		e32: {
 			sub_count: 150,
 			pub_count: 15
 		},
-		eval_3_3: {
+		e33: {
 			sub_count: 200,
 			pub_count: 15
 		},
-		eval_3_4: {
+		e34: {
 			sub_count: 250,
 			pub_count: 15
 		},
-		eval_3_5: {
+		e35: {
 			sub_count: 300,
 			pub_count: 15
 		},

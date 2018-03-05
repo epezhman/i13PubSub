@@ -21,8 +21,8 @@ let totalMessagesInExperiment = 0;
 
 let eval_inputs = process.argv.slice(2);
 
-let eval_type = eval_inputs[0]; // topic, content, function
-let eval_cofig = config.EVALS[eval_inputs[1]]; // eval_1_1 ...
+let eval_type = eval_inputs[0]; // t for topic, c for content, f for function
+let eval_cofig = config.EVALS[eval_inputs[1]]; // e11 ...
 
 let publications = eval_cofig['pub_count'];
 let delays = config.EVAL_DELAY;
@@ -35,23 +35,23 @@ function publishMessages(publicationsCount, delayMS) {
 	let startTime = Date.now();
 	let publications = Array.apply(null, {length: publicationsCount}).map(Number.call, Number);
 	let meta = null;
-	if (eval_type === 'content') {
+	if (eval_type === 'c') {
 		meta = JSON.stringify(config.PUB_PREDICATE);
 	}
-	else if (eval_type === 'topic') {
+	else if (eval_type === 't') {
 		meta = config.TOPICS.slice(0, topics).toString();
 	}
-	else if (eval_type === 'function') {
+	else if (eval_type === 'f') {
 		meta = config.FUNCTION_SUB;
 	}
 	eachSeries(publications, (counter, cb) => {
-		if (eval_type === 'topic') {
+		if (eval_type === 't') {
 			publishTopicsBased(meta, 'Message ' + counter, delayMS, cb);
 		}
-		else if (eval_type === 'content') {
+		else if (eval_type === 'c') {
 			publishContentsBased(meta, 'Message ' + counter, delayMS, cb);
 		}
-		else if (eval_type === 'function') {
+		else if (eval_type === 'f') {
 			publishFunctionBased(meta, delayMS, cb);
 		}
 		console.log("Message Sent: " + (counter + 1));

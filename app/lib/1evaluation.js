@@ -24,11 +24,12 @@ let totalMessagesInExperiment = 0;
 
 let eval_inputs = process.argv.slice(2);
 
-let eval_type = eval_inputs[0]; // topic, content, function
-let eval_cofig = config.EVALS[eval_inputs[1]]; // eval_1_1 ...
+let eval_type = eval_inputs[0]; // t for topic, c for content, f for function
+let eval_cofig = config.EVALS[eval_inputs[1]]; // e11 ...
 let eval_sub_seq = eval_inputs[2]; // 0, 1, 2, 3 ...
 
 let subscribers = eval_cofig['sub_count'] / config.EVAL_NODE_COUNT;
+let all_subscribers = eval_cofig['sub_count'];
 let publications = eval_cofig['pub_count'];
 let topics = config.EVAL_TOPICS;
 let pubType = eval_type;
@@ -101,55 +102,68 @@ function resetPrepareDevices(subscribers, subscribers_seq) {
 	prepareSubscribers(subscribers, subscribers_seq);
 }
 
-function initEval(subscribers, subscribers_seq, topics, pubType, publications) {
-	if (pubType === 'topic') {
-		ows.actions.invoke({
-			name: "pubsub/bulk_subscribe_topics",
-			blocking: true,
-			result: true,
-			params: {
-				topics: config.TOPICS.slice(0, topics).toString(),
-				subscribes: config.SUBSCRIBERS.slice(subscribers_seq * subscribers,
-					(subscribers_seq * subscribers) + subscribers).toString()
-			}
-		}).then(result => {
+function initEval(all_subscribers, subscribers, subscribers_seq, topics, pubType, publications) {
+	if (pubType === 't') {
+		if (subscribers_seq === '0') {
+			ows.actions.invoke({
+				name: "pubsub/bulk_subscribe_topics",
+				blocking: true,
+				result: true,
+				params: {
+					topics: config.TOPICS.slice(0, topics).toString(),
+					subscribes: config.SUBSCRIBERS.slice(0, all_subscribers).toString()
+				}
+			}).then(result => {
+				resetPrepareDevices(subscribers, subscribers_seq);
+			}).catch(err => {
+				console.error(err)
+			});
+		}
+		else {
 			resetPrepareDevices(subscribers, subscribers_seq);
-		}).catch(err => {
-			console.error(err)
-		});
-	} else if (pubType === 'content') {
-		ows.actions.invoke({
-			name: "pubsub/bulk_subscribe_predicates",
-			blocking: true,
-			result: true,
-			params: {
-				predicates: JSON.stringify(config.SUB_PREDICATES),
-				subscribes: config.SUBSCRIBERS.slice(subscribers_seq * subscribers,
-					(subscribers_seq * subscribers) + subscribers).toString()
-			}
-		}).then(result => {
+		}
+
+	} else if (pubType === 'c') {
+		if (subscribers_seq === '0') {
+			ows.actions.invoke({
+				name: "pubsub/bulk_subscribe_predicates",
+				blocking: true,
+				result: true,
+				params: {
+					predicates: JSON.stringify(config.SUB_PREDICATES),
+					subscribes: config.SUBSCRIBERS.slice(0, all_subscribers).toString()
+				}
+			}).then(result => {
+				resetPrepareDevices(subscribers, subscribers_seq);
+			}).catch(err => {
+				console.error(err)
+			});
+		}
+		else {
 			resetPrepareDevices(subscribers, subscribers_seq);
-		}).catch(err => {
-			console.error(err)
-		});
+		}
 	}
-	else if (pubType === 'function') {
-		ows.actions.invoke({
-			name: "pubsub/bulk_subscribe_function",
-			blocking: true,
-			result: true,
-			params: {
-				sub_type: config.FUNCTION_SUB.sub_type,
-				matching_input: config.FUNCTION_SUB.matching_input,
-				matching_function: config.FUNCTION_SUB.matching_function,
-				subscribers: config.SUBSCRIBERS.slice(subscribers_seq * subscribers,
-					(subscribers_seq * subscribers) + subscribers).toString()
-			}
-		}).then(result => {
+	else if (pubType === 'f') {
+		if (subscribers_seq === '0') {
+			ows.actions.invoke({
+				name: "pubsub/bulk_subscribe_function",
+				blocking: true,
+				result: true,
+				params: {
+					sub_type: config.FUNCTION_SUB.sub_type,
+					matching_input: config.FUNCTION_SUB.matching_input,
+					matching_function: config.FUNCTION_SUB.matching_function,
+					subscribers: config.SUBSCRIBERS.slice(0, all_subscribers).toString()
+				}
+			}).then(result => {
+				resetPrepareDevices(subscribers, subscribers_seq);
+			}).catch(err => {
+				console.error(err)
+			});
+		}
+		else {
 			resetPrepareDevices(subscribers, subscribers_seq);
-		}).catch(err => {
-			console.error(err)
-		});
+		}
 	}
 }
 
@@ -172,5 +186,5 @@ if (publications && publications > 1000) {
 if (subscribers && topics && publications && pubType) {
 	console.log('Initializing.....');
 	totalMessagesInExperiment = publications * topics;
-	initEval(subscribers, eval_sub_seq, topics, pubType, publications)
+	initEval(all_subscribers, subscribers, eval_sub_seq, topics, pubType, publications)
 }
