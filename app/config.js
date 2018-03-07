@@ -69,7 +69,7 @@ module.exports = {
 		matching_function: "let populations = {'new zealand': 4693000, 'germany': 8267000}; let sentence = nlp(publication); let places = sentence.places().out('array'); return populations[places[0]] > 4000000;"
 	},
 	EVAL_TOPICS: 1,
-	EVAL_NODE_COUNT: 1,
+	EVAL_NODE_COUNT: 4,
 	EVALS: {
 		e11: {
 			sub_count: 100,
