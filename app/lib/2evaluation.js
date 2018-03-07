@@ -25,7 +25,7 @@ let eval_type = eval_inputs[0]; // t for topic, c for content, f for function
 let eval_cofig = config.EVALS[eval_inputs[1]]; // e11 ...
 
 let publications = eval_cofig['pub_count'];
-let delays = config.EVAL_DELAY;
+let delays = eval_cofig['latency'];
 let topics = config.EVAL_TOPICS;
 
 function publishMessages(publicationsCount, delayMS) {
@@ -73,10 +73,10 @@ function publishTopicsBased(topics, message, delayMs, cb) {
 			message: message
 		}
 	}).then(result => {
-		setTimeout(cb, delayMs);
 	}).catch(err => {
 		console.error(err)
 	});
+	setTimeout(cb, delayMs);
 }
 
 function publishContentsBased(predicates, message, delayMs, cb) {
@@ -89,10 +89,10 @@ function publishContentsBased(predicates, message, delayMs, cb) {
 			message: message
 		}
 	}).then(result => {
-		setTimeout(cb, delayMs);
 	}).catch(err => {
 		console.error(err)
 	});
+	setTimeout(cb, delayMs);
 }
 
 function publishFunctionBased(meta, delayMs, cb) {
@@ -107,10 +107,10 @@ function publishFunctionBased(meta, delayMs, cb) {
 			message: meta['matching_pub']
 		}
 	}).then(result => {
-		setTimeout(cb, delayMs);
 	}).catch(err => {
 		console.error(err)
 	});
+	setTimeout(cb, delayMs);
 }
 
 function resetValues() {

@@ -68,69 +68,83 @@ module.exports = {
 		matching_pub: 'DEBS2018 will be held at the University of Waikato in New Zealand.',
 		matching_function: "let populations = {'new zealand': 4693000, 'germany': 8267000}; let sentence = nlp(publication); let places = sentence.places().out('array'); return populations[places[0]] > 4000000;"
 	},
-	EVAL_DELAY: 100,
 	EVAL_TOPICS: 1,
-	EVAL_NODE_COUNT: 4,
+	EVAL_NODE_COUNT: 1,
 	EVALS: {
 		e11: {
 			sub_count: 100,
-			pub_count: 5
+			pub_count: 10,
+			latency: 100
 		},
 		e12: {
 			sub_count: 150,
-			pub_count: 5
+			pub_count: 10,
+			latency: 100
 		},
 		e13: {
 			sub_count: 200,
-			pub_count: 5
+			pub_count: 10,
+			latency: 100
 		},
 		e14: {
 			sub_count: 250,
-			pub_count: 5
+			pub_count: 10,
+			latency: 100
 		},
 		e15: {
 			sub_count: 300,
-			pub_count: 5
+			pub_count: 10,
+			latency: 100
 		},
 		e21: {
 			sub_count: 100,
-			pub_count: 10
+			pub_count: 25,
+			latency: 40
 		},
 		e22: {
 			sub_count: 150,
-			pub_count: 10
+			pub_count: 25,
+			latency: 40
 		},
 		e23: {
 			sub_count: 200,
-			pub_count: 10
+			pub_count: 25,
+			latency: 40
 		},
 		e24: {
 			sub_count: 250,
-			pub_count: 10
+			pub_count: 25,
+			latency: 40
 		},
 		e25: {
 			sub_count: 300,
-			pub_count: 10
+			pub_count: 25,
+			latency: 40
 		},
 		e31: {
 			sub_count: 100,
-			pub_count: 15
+			pub_count: 40,
+			latency: 25
 		},
 		e32: {
 			sub_count: 150,
-			pub_count: 15
+			pub_count: 40,
+			latency: 25
 		},
 		e33: {
 			sub_count: 200,
-			pub_count: 15
+			pub_count: 40,
+			latency: 25
 		},
 		e34: {
 			sub_count: 250,
-			pub_count: 15
+			pub_count: 40,
+			latency: 25
 		},
 		e35: {
 			sub_count: 300,
-			pub_count: 15
+			pub_count: 40,
+			latency: 25
 		},
 	}
 };

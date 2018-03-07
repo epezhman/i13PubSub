@@ -53,8 +53,9 @@ function prepareSubscribers(subscribers, subscribers_seq) {
 				totalGotMessageCounter += 1;
 				if (firstMessageEver) {
 					firstMessageEver = false;
-					console.log("Start Receiving Messages.....");
+					console.log('\x1b[33m%s\x1b[0m', "Start Receiving Messages.....");
 				}
+				// console.log('Got ' + totalGotMessageCounter);
 				if (experimentLogs[sub_id]['subCounter'] === 1) {
 					experimentLogs[sub_id]['subStartTimestamp'] = Date.now();
 				}
