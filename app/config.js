@@ -96,6 +96,16 @@ module.exports = {
 			pub_count: 10,
 			latency: 100
 		},
+		e16: {
+			sub_count: 352,
+			pub_count: 10,
+			latency: 100
+		},
+		e17: {
+			sub_count: 400,
+			pub_count: 10,
+			latency: 100
+		},
 		e21: {
 			sub_count: 100,
 			pub_count: 25,
@@ -118,6 +128,16 @@ module.exports = {
 		},
 		e25: {
 			sub_count: 300,
+			pub_count: 25,
+			latency: 40
+		},
+		e26: {
+			sub_count: 352,
+			pub_count: 25,
+			latency: 40
+		},
+		e27: {
+			sub_count: 400,
 			pub_count: 25,
 			latency: 40
 		},
@@ -146,5 +166,15 @@ module.exports = {
 			pub_count: 40,
 			latency: 25
 		},
+		e36: {
+			sub_count: 352,
+			pub_count: 40,
+			latency: 25
+		},
+		e37: {
+			sub_count: 400,
+			pub_count: 40,
+			latency: 25
+		}
 	}
 };
