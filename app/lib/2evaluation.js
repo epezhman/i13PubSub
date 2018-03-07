@@ -46,10 +46,10 @@ function publishMessages(publicationsCount, delayMS) {
 	}
 	eachSeries(publications, (counter, cb) => {
 		if (eval_type === 't') {
-			publishTopicsBased(meta, 'Message ' + counter, delayMS, cb);
+			publishTopicsBased(meta, config.PUBLICATION_DATA, delayMS, cb);
 		}
 		else if (eval_type === 'c') {
-			publishContentsBased(meta, 'Message ' + counter, delayMS, cb);
+			publishContentsBased(meta, config.PUBLICATION_DATA, delayMS, cb);
 		}
 		else if (eval_type === 'f') {
 			publishFunctionBased(meta, delayMS, cb);

@@ -46,34 +46,35 @@ module.exports = {
 	SUBSCRIBERS: secrets.SUBSCRIBERS,
 	MAX_NUMBER_SUBSCRIBER: 1000,
 	MAX_NUMBER_MESSAGES: 100,
+	PUBLICATION_DATA: 'Lorem ipsum dolor sit amet , consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
 	TOPICS: ['evaluation_1', 'evaluation_2', 'evaluation_3', 'evaluation_4', 'evaluation_5'],
 	SUB_PREDICATES: {
-		type_1: {
-			value: 'news',
+		conference_1: {
+			value: 'debs',
 			operator: '='
 		},
-		popularity_1: {
-			value: '200',
+		attendance_1: {
+			value: '1000',
 			operator: '>='
 		},
 	},
 	PUB_PREDICATE: {
-		type_1: 'news',
-		popularity_1: 300
+		conference_1: 'debs',
+		attendance_1: 5000
 	},
 	FUNCTION_SUB: {
 		sub_type: 'text_analyze',
-		matching_input: "a,",
-		matching_pub: 3,
-		matching_function: "return (parseInt(a) + 2) === 5"
+		matching_input: "publication,",
+		matching_pub: 'DEBS2018 will be held at the University of Waikato in New Zealand.',
+		matching_function: "let populations = {'new zealand': 4693000, 'germany': 8267000}; let sentence = nlp(publication); let places = sentence.places().out('array'); return populations[places[0]] > 4000000;"
 	},
 	EVAL_DELAY: 100,
 	EVAL_TOPICS: 1,
 	EVAL_NODE_COUNT: 4,
 	EVALS: {
 		e11: {
-			sub_count: 100,
-			pub_count: 5
+			sub_count: 4,
+			pub_count: 2
 		},
 		e12: {
 			sub_count: 150,
