@@ -73,8 +73,8 @@ module.exports = {
 	EVAL_NODE_COUNT: 4,
 	EVALS: {
 		e11: {
-			sub_count: 4,
-			pub_count: 2
+			sub_count: 100,
+			pub_count: 5
 		},
 		e12: {
 			sub_count: 150,
