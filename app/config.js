@@ -77,7 +77,7 @@ module.exports = {
 			latency: 100
 		},
 		e12: {
-			sub_count: 150,
+			sub_count: 152,
 			pub_count: 10,
 			latency: 100
 		},
@@ -87,7 +87,7 @@ module.exports = {
 			latency: 100
 		},
 		e14: {
-			sub_count: 250,
+			sub_count: 252,
 			pub_count: 10,
 			latency: 100
 		},
@@ -102,7 +102,7 @@ module.exports = {
 			latency: 40
 		},
 		e22: {
-			sub_count: 150,
+			sub_count: 152,
 			pub_count: 25,
 			latency: 40
 		},
@@ -112,7 +112,7 @@ module.exports = {
 			latency: 40
 		},
 		e24: {
-			sub_count: 250,
+			sub_count: 252,
 			pub_count: 25,
 			latency: 40
 		},
@@ -127,7 +127,7 @@ module.exports = {
 			latency: 25
 		},
 		e32: {
-			sub_count: 150,
+			sub_count: 152,
 			pub_count: 40,
 			latency: 25
 		},
@@ -137,7 +137,7 @@ module.exports = {
 			latency: 25
 		},
 		e34: {
-			sub_count: 250,
+			sub_count: 252,
 			pub_count: 40,
 			latency: 25
 		},
