@@ -12,7 +12,6 @@ const openWhiskOptions = {
 
 let ows = openwhisk(openWhiskOptions);
 
-let finishedSuccessfully = false;
 
 let devices = {};
 let experimentLogs = {};
@@ -21,6 +20,7 @@ let doneCounter = 0;
 let sumTime = 0;
 let totalGotMessageCounter = 0;
 let totalMessagesInExperiment = 0;
+let firstMessageEver = true;
 
 let eval_inputs = process.argv.slice(2);
 
@@ -51,7 +51,10 @@ function prepareSubscribers(subscribers, subscribers_seq) {
 			if (commandName === 'published_message') {
 				experimentLogs[sub_id]['subCounter'] += 1;
 				totalGotMessageCounter += 1;
-				console.log("Received Message Counter: " + totalGotMessageCounter);
+				if (firstMessageEver) {
+					firstMessageEver = false;
+					console.log("Start Receiving Messages.....");
+				}
 				if (experimentLogs[sub_id]['subCounter'] === 1) {
 					experimentLogs[sub_id]['subStartTimestamp'] = Date.now();
 				}
@@ -60,8 +63,9 @@ function prepareSubscribers(subscribers, subscribers_seq) {
 					sumTime += (experimentLogs[sub_id]['subEndTimestamp'] - experimentLogs[sub_id]['subStartTimestamp']);
 					doneCounter += 1;
 					if (doneCounter === subCounter) {
-						console.log("Average Message Latency: " + Math.round(sumTime / doneCounter));
-						finishedSuccessfully = true;
+						console.log("Number of messages received: " + (totalMessagesInExperiment * doneCounter));
+						console.log('\x1b[36m%s\x1b[0m', "Average Message Latency: " + Math.round(sumTime / doneCounter));
+						resetExperimentValue();
 					}
 				}
 			}
@@ -85,6 +89,18 @@ function getSub(sub_id) {
 		"enforce-ws": true
 	};
 	return new Client.IotfDevice(deviceConfig);
+}
+
+function resetExperimentValue() {
+	sumTime = 0;
+	totalGotMessageCounter = 0;
+	doneCounter = 0;
+	firstMessageEver = true;
+	for (let sub_id in experimentLogs) {
+		if (experimentLogs.hasOwnProperty(sub_id)) {
+			experimentLogs[sub_id]['subCounter'] = 0;
+		}
+	}
 }
 
 function resetPrepareDevices(subscribers, subscribers_seq) {
